@@ -1,0 +1,6 @@
+{
+  "name": "Eco-Bazar Dashboard",
+  "description": "Comprehensive e-commerce analytics and store management dashboard for Eco-Bazar featuring real-time KPIs, sales and revenue charts, order tracking, product metrics, and inventory analysis.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
