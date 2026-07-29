@@ -26,7 +26,8 @@ import {
   QrCode,
   Shield,
   Laptop,
-  Check
+  Check,
+  LogOut
 } from 'lucide-react';
 
 interface ActivityLogItem {
@@ -93,13 +94,17 @@ const MOCK_ACTIVITY_LOGS: ActivityLogItem[] = [
   }
 ];
 
-export const AdminProfileView: React.FC = () => {
+interface AdminProfileViewProps {
+  onLogout?: () => void;
+}
+
+export const AdminProfileView: React.FC<AdminProfileViewProps> = ({ onLogout }) => {
   const [activeTab, setActiveTab] = useState<'profile' | 'password' | '2fa' | 'activity-log'>('profile');
 
   // Profile Form State
   const [fullName, setFullName] = useState('Alexander Wright');
   const [jobTitle, setJobTitle] = useState('Head of Operations & Ecommerce');
-  const [email, setEmail] = useState('admin@apexstore.io');
+  const [email, setEmail] = useState('admin@ecobazar.io');
   const [phone, setPhone] = useState('+1 (555) 382-9910');
   const [department, setDepartment] = useState('Executive Store Operations');
   const [timezone, setTimezone] = useState('Pacific Time (US & Canada) - UTC-07:00');
@@ -251,11 +256,22 @@ export const AdminProfileView: React.FC = () => {
           </div>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
           <div className="px-3.5 py-1.5 bg-slate-950 border border-slate-800 rounded-xl text-xs font-mono text-slate-400 flex items-center gap-2">
             <ShieldCheck className="w-4 h-4 text-emerald-400" />
             <span>2FA Status: <strong className={twoFactorEnabled ? 'text-emerald-400' : 'text-rose-400'}>{twoFactorEnabled ? 'Active & Protected' : 'Disabled'}</strong></span>
           </div>
+
+          {onLogout && (
+            <button
+              onClick={onLogout}
+              className="flex items-center gap-1.5 px-3 py-1.5 bg-red-500/10 hover:bg-red-500/20 text-red-400 font-semibold text-xs border border-red-500/30 rounded-xl transition-all active:scale-95"
+              title="Log Out Admin Session"
+            >
+              <LogOut className="w-3.5 h-3.5" />
+              <span>Log Out</span>
+            </button>
+          )}
         </div>
       </div>
 

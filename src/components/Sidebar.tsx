@@ -28,7 +28,8 @@ import {
   Sparkles,
   Layers,
   Leaf,
-  X
+  X,
+  LogOut
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -38,6 +39,8 @@ interface SidebarProps {
   onCloseMobile?: () => void;
   lowStockCount?: number;
   pendingOrdersCount?: number;
+  currentUser?: { name: string; email: string; role: string };
+  onLogout?: () => void;
 }
 
 interface NavGroup {
@@ -60,8 +63,18 @@ export const Sidebar: React.FC<SidebarProps> = ({
   isOpen = true,
   onCloseMobile,
   lowStockCount = 0,
-  pendingOrdersCount = 0
+  pendingOrdersCount = 0,
+  currentUser = { name: 'Alexander Wright', email: 'admin@ecobazar.io', role: 'Super Admin' },
+  onLogout
 }) => {
+  const getInitials = (name: string) => {
+    return name
+      .split(' ')
+      .map(part => part[0])
+      .join('')
+      .toUpperCase()
+      .slice(0, 2) || 'AD';
+  };
   // Track expanded parent accordions
   const [expandedGroups, setExpandedGroups] = useState<Record<string, boolean>>({
     products: currentView.startsWith('products-'),
@@ -362,20 +375,32 @@ export const Sidebar: React.FC<SidebarProps> = ({
         })}
       </div>
 
-      {/* Footer Profile Status */}
-      <div className="p-3 border-t border-slate-800/80 bg-slate-950/40">
-        <div 
-          onClick={() => onNavigate('admin-profile')}
-          className="flex items-center gap-3 p-2 rounded-xl hover:bg-slate-900 cursor-pointer transition-all"
-        >
-          <div className="w-8 h-8 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center font-bold text-indigo-400">
-            AD
+      {/* Footer Profile Status & Logout */}
+      <div className="p-3 border-t border-slate-800/80 bg-slate-950/60">
+        <div className="flex items-center justify-between gap-2 p-2 rounded-xl bg-slate-900/80 border border-slate-800/80">
+          <div 
+            onClick={() => onNavigate('admin-profile')}
+            className="flex items-center gap-2.5 min-w-0 flex-1 cursor-pointer hover:opacity-80 transition-all"
+            title="View Admin Profile"
+          >
+            <div className="w-8 h-8 rounded-lg bg-emerald-600/20 border border-emerald-500/30 flex items-center justify-center font-bold text-xs text-emerald-400 shrink-0">
+              {getInitials(currentUser.name)}
+            </div>
+            <div className="flex-1 min-w-0">
+              <div className="text-xs font-semibold text-white truncate">{currentUser.name}</div>
+              <div className="text-[10px] text-slate-400 truncate">{currentUser.email}</div>
+            </div>
           </div>
-          <div className="flex-1 min-w-0">
-            <div className="text-xs font-semibold text-white truncate">Admin Operations</div>
-            <div className="text-[10px] text-slate-400 truncate">admin@apexstore.io</div>
-          </div>
-          <ShieldCheck className="w-4 h-4 text-emerald-400 shrink-0" />
+
+          {onLogout && (
+            <button
+              onClick={onLogout}
+              className="p-1.5 text-slate-400 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-colors shrink-0 active:scale-95"
+              title="Log Out Admin Session"
+            >
+              <LogOut className="w-4 h-4" />
+            </button>
+          )}
         </div>
       </div>
     </aside>

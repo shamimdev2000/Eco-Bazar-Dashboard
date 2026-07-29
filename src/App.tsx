@@ -49,6 +49,7 @@ import { NotificationsView } from './components/NotificationsView';
 import { AdminProfileView } from './components/AdminProfileView';
 import { UIComponentsShowroomView } from './components/UIComponentsShowroomView';
 import { GenericSectionView } from './components/GenericSectionView';
+import { LoginView } from './components/LoginView';
 
 import { 
   Users, 
@@ -64,6 +65,37 @@ import {
 } from 'lucide-react';
 
 export default function App() {
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => {
+    return localStorage.getItem('ecobazar_admin_auth') !== 'false';
+  });
+  const [currentUser, setCurrentUser] = useState<{ name: string; email: string; role: string }>(() => {
+    const savedUser = localStorage.getItem('ecobazar_admin_user');
+    if (savedUser) {
+      try {
+        return JSON.parse(savedUser);
+      } catch (e) {
+        // fallback
+      }
+    }
+    return {
+      name: 'Alexander Wright',
+      email: 'admin@ecobazar.io',
+      role: 'Super Admin'
+    };
+  });
+
+  const handleLogin = (user: { name: string; email: string; role: string }) => {
+    setCurrentUser(user);
+    setIsAuthenticated(true);
+    localStorage.setItem('ecobazar_admin_auth', 'true');
+    localStorage.setItem('ecobazar_admin_user', JSON.stringify(user));
+  };
+
+  const handleLogout = () => {
+    setIsAuthenticated(false);
+    localStorage.setItem('ecobazar_admin_auth', 'false');
+  };
+
   const [currentView, setCurrentView] = useState<AdminViewId>('dashboard');
   const [timeRange, setTimeRange] = useState<TimeRange>('30d');
   const [selectedStatusFilter, setSelectedStatusFilter] = useState<OrderStatus | 'All'>('All');
@@ -252,11 +284,15 @@ export default function App() {
     const encodedUri = encodeURI(csvContent);
     const link = document.createElement('a');
     link.setAttribute('href', encodedUri);
-    link.setAttribute('download', `apexstore_report_${currentView}_${timeRange}.csv`);
+    link.setAttribute('download', `ecobazar_report_${currentView}_${timeRange}.csv`);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
   };
+
+  if (!isAuthenticated) {
+    return <LoginView onLogin={handleLogin} />;
+  }
 
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-slate-200 font-sans antialiased flex flex-row overflow-x-hidden">
@@ -267,6 +303,8 @@ export default function App() {
           onNavigate={(viewId) => setCurrentView(viewId)}
           lowStockCount={lowStockCount}
           pendingOrdersCount={pendingCount}
+          currentUser={currentUser}
+          onLogout={handleLogout}
         />
       )}
 
@@ -282,6 +320,9 @@ export default function App() {
           isRefreshing={isRefreshing}
           onRefresh={handleRefresh}
           onToggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
+          currentUser={currentUser}
+          onLogout={handleLogout}
+          onNavigateProfile={() => setCurrentView('admin-profile')}
         />
 
         {/* View Router */}
@@ -558,7 +599,7 @@ export default function App() {
 
           {/* ADMIN PROFILE VIEW */}
           {currentView === 'admin-profile' && (
-            <AdminProfileView />
+            <AdminProfileView onLogout={handleLogout} />
           )}
 
           {/* UI COMPONENTS & DESIGN SYSTEM SHOWROOM */}

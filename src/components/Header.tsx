@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { TimeRange } from '../types';
 import { 
   Calendar, 
@@ -6,8 +6,12 @@ import {
   RefreshCw, 
   Search, 
   PanelLeft,
-  Store,
-  Leaf
+  Leaf,
+  LogOut,
+  User,
+  ShieldCheck,
+  ChevronDown,
+  Settings
 } from 'lucide-react';
 
 interface HeaderProps {
@@ -19,6 +23,9 @@ interface HeaderProps {
   isRefreshing: boolean;
   onRefresh: () => void;
   onToggleSidebar?: () => void;
+  currentUser?: { name: string; email: string; role: string };
+  onLogout?: () => void;
+  onNavigateProfile?: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -29,8 +36,33 @@ export const Header: React.FC<HeaderProps> = ({
   onExport,
   isRefreshing,
   onRefresh,
-  onToggleSidebar
+  onToggleSidebar,
+  currentUser = { name: 'Alexander Wright', email: 'admin@ecobazar.io', role: 'Super Admin' },
+  onLogout,
+  onNavigateProfile
 }) => {
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsProfileOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const getInitials = (name: string) => {
+    return name
+      .split(' ')
+      .map(part => part[0])
+      .join('')
+      .toUpperCase()
+      .slice(0, 2) || 'AD';
+  };
+
   return (
     <header className="bg-[#0d0d0d] border-b border-slate-800 text-white sticky top-0 z-30 shadow-sm">
       <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
@@ -81,6 +113,15 @@ export const Header: React.FC<HeaderProps> = ({
               >
                 <Download className="w-4 h-4" />
               </button>
+              {onLogout && (
+                <button
+                  onClick={onLogout}
+                  className="p-2 text-red-400 hover:text-red-300 bg-red-500/10 border border-red-500/20 rounded-lg active:scale-95"
+                  title="Logout Admin Session"
+                >
+                  <LogOut className="w-4 h-4" />
+                </button>
+              )}
             </div>
           </div>
 
@@ -126,8 +167,8 @@ export const Header: React.FC<HeaderProps> = ({
               </div>
             </div>
 
-            {/* Desktop Actions */}
-            <div className="hidden md:flex items-center gap-2">
+            {/* Desktop Actions & Admin User Profile */}
+            <div className="hidden md:flex items-center gap-2.5">
               <button
                 onClick={onRefresh}
                 disabled={isRefreshing}
@@ -144,6 +185,70 @@ export const Header: React.FC<HeaderProps> = ({
                 <Download className="w-3.5 h-3.5" />
                 <span>Export</span>
               </button>
+
+              {/* Admin User Profile Dropdown */}
+              <div className="relative" ref={dropdownRef}>
+                <button
+                  onClick={() => setIsProfileOpen(!isProfileOpen)}
+                  className="flex items-center gap-2 pl-2 pr-2.5 py-1.5 bg-slate-900 hover:bg-slate-800 border border-slate-800 rounded-xl transition-all active:scale-95"
+                >
+                  <div className="w-7 h-7 rounded-lg bg-emerald-600/20 border border-emerald-500/30 text-emerald-400 font-bold text-xs flex items-center justify-center shrink-0">
+                    {getInitials(currentUser.name)}
+                  </div>
+                  <div className="text-left hidden lg:block">
+                    <div className="text-xs font-bold text-white leading-tight truncate max-w-[110px]">
+                      {currentUser.name}
+                    </div>
+                    <div className="text-[10px] text-emerald-400 font-medium leading-none">
+                      {currentUser.role}
+                    </div>
+                  </div>
+                  <ChevronDown className="w-3.5 h-3.5 text-slate-400" />
+                </button>
+
+                {/* Profile Dropdown Menu */}
+                {isProfileOpen && (
+                  <div className="absolute right-0 mt-2 w-56 bg-slate-900 border border-slate-800 rounded-xl shadow-2xl z-50 py-1 divide-y divide-slate-800/80 animate-fadeIn">
+                    <div className="px-3.5 py-2.5">
+                      <p className="text-xs font-bold text-white truncate">{currentUser.name}</p>
+                      <p className="text-[11px] text-slate-400 truncate">{currentUser.email}</p>
+                      <span className="inline-block mt-1.5 px-2 py-0.5 rounded text-[10px] font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                        {currentUser.role}
+                      </span>
+                    </div>
+
+                    <div className="py-1">
+                      {onNavigateProfile && (
+                        <button
+                          onClick={() => {
+                            setIsProfileOpen(false);
+                            onNavigateProfile();
+                          }}
+                          className="w-full flex items-center gap-2 px-3.5 py-2 text-xs text-slate-300 hover:text-white hover:bg-slate-800/80 transition-colors"
+                        >
+                          <User className="w-3.5 h-3.5 text-slate-400" />
+                          <span>Admin Profile & 2FA</span>
+                        </button>
+                      )}
+                    </div>
+
+                    <div className="py-1">
+                      {onLogout && (
+                        <button
+                          onClick={() => {
+                            setIsProfileOpen(false);
+                            onLogout();
+                          }}
+                          className="w-full flex items-center gap-2 px-3.5 py-2 text-xs font-semibold text-red-400 hover:text-red-300 hover:bg-red-500/10 transition-colors"
+                        >
+                          <LogOut className="w-3.5 h-3.5" />
+                          <span>Log Out Admin Session</span>
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </div>
