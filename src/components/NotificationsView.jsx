@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { SystemNotificationItem, AdminViewId } from '../types';
 import { 
   Bell, 
   AlertTriangle, 
@@ -18,16 +17,7 @@ import {
   ArrowRight
 } from 'lucide-react';
 
-interface NotificationsViewProps {
-  notifications: SystemNotificationItem[];
-  onMarkAsRead: (id: string) => void;
-  onMarkAllAsRead: () => void;
-  onDeleteNotification: (id: string) => void;
-  onAddNotification: (notification: SystemNotificationItem) => void;
-  onNavigateView: (view: AdminViewId) => void;
-}
-
-export const NotificationsView: React.FC<NotificationsViewProps> = ({
+export const NotificationsView = ({
   notifications,
   onMarkAsRead,
   onMarkAllAsRead,
@@ -35,13 +25,11 @@ export const NotificationsView: React.FC<NotificationsViewProps> = ({
   onAddNotification,
   onNavigateView
 }) => {
-  const [selectedFilter, setSelectedFilter] = useState<
-    'all' | 'low_stock' | 'new_order' | 'payment_success' | 'cancelled_order' | 'system'
-  >('all');
+  const [selectedFilter, setSelectedFilter] = useState('all');
 
-  const [toastMsg, setToastMsg] = useState<string | null>(null);
+  const [toastMsg, setToastMsg] = useState(null);
 
-  const triggerToast = (msg: string) => {
+  const triggerToast = (msg) => {
     setToastMsg(msg);
     setTimeout(() => setToastMsg(null), 3000);
   };
@@ -54,11 +42,11 @@ export const NotificationsView: React.FC<NotificationsViewProps> = ({
   const unreadCount = notifications.filter(n => !n.read).length;
 
   // SIMULATE EVENTS
-  const simulateEvent = (type: 'low_stock' | 'new_order' | 'payment_success' | 'cancelled_order' | 'system') => {
+  const simulateEvent = (type) => {
     const timestamp = new Date().toISOString().replace('T', ' ').substring(0, 16);
     const newId = `NOTIF-${Date.now().toString().slice(-4)}`;
 
-    let newNotif: SystemNotificationItem;
+    let newNotif;
 
     switch (type) {
       case 'low_stock':
@@ -130,7 +118,7 @@ export const NotificationsView: React.FC<NotificationsViewProps> = ({
     triggerToast(`Simulated Event: ${newNotif.title}`);
   };
 
-  const getTypeBadge = (type: SystemNotificationItem['type']) => {
+  const getTypeBadge = (type) => {
     switch (type) {
       case 'low_stock':
         return (
@@ -266,7 +254,7 @@ export const NotificationsView: React.FC<NotificationsViewProps> = ({
           return (
             <button
               key={tab.id}
-              onClick={() => setSelectedFilter(tab.id as any)}
+              onClick={() => setSelectedFilter(tab.id)}
               className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all border flex items-center gap-2 ${
                 active 
                   ? 'bg-indigo-600 text-white border-indigo-500 shadow-md shadow-indigo-600/20' 
@@ -327,7 +315,7 @@ export const NotificationsView: React.FC<NotificationsViewProps> = ({
                   <button
                     onClick={() => {
                       onMarkAsRead(notif.id);
-                      onNavigateView(notif.actionUrl as AdminViewId);
+                      onNavigateView(notif.actionUrl);
                     }}
                     className="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs rounded-xl flex items-center gap-1"
                   >

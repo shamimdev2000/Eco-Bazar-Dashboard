@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { Coupon } from '../types';
 import { 
   Ticket, 
   Plus, 
@@ -25,48 +24,41 @@ import {
   Info
 } from 'lucide-react';
 
-interface CouponsViewProps {
-  coupons: Coupon[];
-  onAddCoupon: (newCoupon: Coupon) => void;
-  onUpdateCoupon: (coupon: Coupon) => void;
-  onDeleteCoupon: (couponId: string) => void;
-}
-
-export const CouponsView: React.FC<CouponsViewProps> = ({
+export const CouponsView = ({
   coupons,
   onAddCoupon,
   onUpdateCoupon,
   onDeleteCoupon
 }) => {
   const [searchTerm, setSearchTerm] = useState('');
-  const [statusFilter, setStatusFilter] = useState<'All' | 'Active' | 'Inactive' | 'Expired'>('All');
-  const [typeFilter, setTypeFilter] = useState<'All' | 'percentage' | 'fixed'>('All');
+  const [statusFilter, setStatusFilter] = useState('All');
+  const [typeFilter, setTypeFilter] = useState('All');
   
   const [showModal, setShowModal] = useState(false);
-  const [editingCoupon, setEditingCoupon] = useState<Coupon | null>(null);
+  const [editingCoupon, setEditingCoupon] = useState(null);
   
-  const [copiedCode, setCopiedCode] = useState<string | null>(null);
-  const [toastNotice, setToastNotice] = useState<string | null>(null);
+  const [copiedCode, setCopiedCode] = useState(null);
+  const [toastNotice, setToastNotice] = useState(null);
 
   // Form State
   const [formData, setFormData] = useState({
     code: '',
     description: '',
-    discountType: 'percentage' as 'percentage' | 'fixed',
+    discountType: 'percentage',
     discountValue: 20,
     minSpend: 50,
     isUnlimited: false,
     usageLimit: 500,
     expiryDate: '2026-08-31',
-    status: 'Active' as 'Active' | 'Inactive' | 'Expired'
+    status: 'Active'
   });
 
-  const triggerToast = (msg: string) => {
+  const triggerToast = (msg) => {
     setToastNotice(msg);
     setTimeout(() => setToastNotice(null), 3500);
   };
 
-  const handleCopyCode = (code: string) => {
+  const handleCopyCode = (code) => {
     navigator.clipboard.writeText(code);
     setCopiedCode(code);
     triggerToast(`Coupon code "${code}" copied to clipboard!`);
@@ -89,7 +81,7 @@ export const CouponsView: React.FC<CouponsViewProps> = ({
     setShowModal(true);
   };
 
-  const openEditModal = (coupon: Coupon) => {
+  const openEditModal = (coupon) => {
     setEditingCoupon(coupon);
     setFormData({
       code: coupon.code,
@@ -105,14 +97,14 @@ export const CouponsView: React.FC<CouponsViewProps> = ({
     setShowModal(true);
   };
 
-  const handleSubmitForm = (e: React.FormEvent) => {
+  const handleSubmitForm = (e) => {
     e.preventDefault();
     if (!formData.code.trim()) return;
 
     const formattedCode = formData.code.trim().toUpperCase();
 
     if (editingCoupon) {
-      const updated: Coupon = {
+      const updated = {
         ...editingCoupon,
         code: formattedCode,
         description: formData.description,
@@ -126,7 +118,7 @@ export const CouponsView: React.FC<CouponsViewProps> = ({
       onUpdateCoupon(updated);
       triggerToast(`Coupon "${formattedCode}" updated successfully!`);
     } else {
-      const created: Coupon = {
+      const created = {
         id: `CPN-${Date.now().toString().slice(-4)}`,
         code: formattedCode,
         description: formData.description || `${formattedCode} promotional discount code`,
@@ -146,9 +138,9 @@ export const CouponsView: React.FC<CouponsViewProps> = ({
     setShowModal(false);
   };
 
-  const handleToggleStatus = (coupon: Coupon) => {
-    const nextStatus: 'Active' | 'Inactive' = coupon.status === 'Active' ? 'Inactive' : 'Active';
-    const updated: Coupon = { ...coupon, status: nextStatus };
+  const handleToggleStatus = (coupon) => {
+    const nextStatus = coupon.status === 'Active' ? 'Inactive' : 'Active';
+    const updated = { ...coupon, status: nextStatus };
     onUpdateCoupon(updated);
     triggerToast(`Coupon "${coupon.code}" status changed to ${nextStatus}.`);
   };
@@ -274,7 +266,7 @@ export const CouponsView: React.FC<CouponsViewProps> = ({
         {/* Filter Pills */}
         <div className="flex flex-wrap items-center gap-2 w-full md:w-auto">
           <div className="flex items-center gap-1 bg-slate-800 p-1 rounded-xl border border-slate-700/80 text-xs">
-            {(['All', 'Active', 'Inactive', 'Expired'] as const).map((st) => (
+            {['All', 'Active', 'Inactive', 'Expired'].map((st) => (
               <button
                 key={st}
                 onClick={() => setStatusFilter(st)}
@@ -639,7 +631,7 @@ export const CouponsView: React.FC<CouponsViewProps> = ({
                 <label className="text-slate-300 font-bold uppercase text-[10px] block mb-1">Initial Coupon Status</label>
                 <select
                   value={formData.status}
-                  onChange={(e) => setFormData({ ...formData, status: e.target.value as any })}
+                  onChange={(e) => setFormData({ ...formData, status: e.target.value })}
                   className="w-full bg-slate-800 border border-slate-700 rounded-xl p-2.5 text-white focus:outline-none focus:border-indigo-500"
                 >
                   <option value="Active">Active (Live in checkout)</option>

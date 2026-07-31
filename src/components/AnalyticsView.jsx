@@ -1,11 +1,4 @@
 import React, { useState } from 'react';
-import { 
-  SalesAnalyticsPoint, 
-  RevenueAnalyticsPoint, 
-  TopProduct, 
-  CategorySale, 
-  OrderItem 
-} from '../types';
 import { SalesAnalyticsChart } from './SalesAnalyticsChart';
 import { RevenueAnalyticsChart } from './RevenueAnalyticsChart';
 import { CategorySalesChart } from './CategorySalesChart';
@@ -40,16 +33,7 @@ import {
   Sparkles
 } from 'lucide-react';
 
-interface AnalyticsViewProps {
-  salesData: SalesAnalyticsPoint[];
-  revenueData: RevenueAnalyticsPoint[];
-  topProducts: TopProduct[];
-  categorySales: CategorySale[];
-  orders: OrderItem[];
-  onUpdateOrderStatus?: (orderId: string, newStatus: any) => void;
-}
-
-export const AnalyticsView: React.FC<AnalyticsViewProps> = ({
+export const AnalyticsView = ({
   salesData,
   revenueData,
   topProducts,
@@ -57,16 +41,14 @@ export const AnalyticsView: React.FC<AnalyticsViewProps> = ({
   orders,
   onUpdateOrderStatus
 }) => {
-  const [timeframe, setTimeframe] = useState<'Daily' | 'Weekly' | 'Monthly' | 'Yearly'>('Monthly');
-  const [activeTab, setActiveTab] = useState<
-    'sales-report' | 'product-report' | 'customer-report' | 'profit-report' | 'sales-analysis' | 'revenue-profit' | 'visitors' | 'conversion' | 'best-selling' | 'categories' | 'recent-orders'
-  >('sales-report');
+  const [timeframe, setTimeframe] = useState('Monthly');
+  const [activeTab, setActiveTab] = useState('sales-report');
 
   const [selectedStatusFilter, setSelectedStatusFilter] = useState('All');
-  const [selectedOrderModal, setSelectedOrderModal] = useState<OrderItem | null>(null);
-  const [toastMsg, setToastMsg] = useState<string | null>(null);
+  const [selectedOrderModal, setSelectedOrderModal] = useState(null);
+  const [toastMsg, setToastMsg] = useState(null);
 
-  const triggerToast = (msg: string) => {
+  const triggerToast = (msg) => {
     setToastMsg(msg);
     setTimeout(() => setToastMsg(null), 3000);
   };
@@ -85,7 +67,7 @@ export const AnalyticsView: React.FC<AnalyticsViewProps> = ({
   const totalNetProfit = totalGrossRevenue - totalCostOfGoods;
 
   // CSV Export Helper
-  const exportToCSV = (filename: string, headers: string[], rows: (string | number)[][]) => {
+  const exportToCSV = (filename, headers, rows) => {
     const csvContent = "data:text/csv;charset=utf-8," 
       + [headers.join(","), ...rows.map(e => e.join(","))].join("\n");
     const encodedUri = encodeURI(csvContent);
@@ -127,7 +109,7 @@ export const AnalyticsView: React.FC<AnalyticsViewProps> = ({
         {/* TIMEFRAME FILTER BUTTONS */}
         <div className="flex items-center gap-1.5 bg-slate-950 p-1.5 rounded-xl border border-slate-800">
           <Calendar className="w-4 h-4 text-slate-400 ml-2 mr-1" />
-          {(['Daily', 'Weekly', 'Monthly', 'Yearly'] as const).map((tf) => {
+          {['Daily', 'Weekly', 'Monthly', 'Yearly'].map((tf) => {
             const active = timeframe === tf;
             return (
               <button
@@ -212,7 +194,7 @@ export const AnalyticsView: React.FC<AnalyticsViewProps> = ({
             return (
               <button
                 key={tab.id}
-                onClick={() => setActiveTab(tab.id as any)}
+                onClick={() => setActiveTab(tab.id)}
                 className={`px-3 py-2 rounded-xl text-xs font-bold transition-all border flex items-center gap-1.5 ${
                   isSelected
                     ? 'bg-indigo-600 text-white border-indigo-500 shadow-md shadow-indigo-600/20'

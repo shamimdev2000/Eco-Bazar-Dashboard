@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { Banner, BannerType } from '../types';
 import { 
   Sliders, 
   Plus, 
@@ -34,22 +33,14 @@ import {
   RefreshCw
 } from 'lucide-react';
 
-interface BannerSliderViewProps {
-  banners: Banner[];
-  onAddBanner: (newBanner: Banner) => void;
-  onUpdateBanner: (banner: Banner) => void;
-  onDeleteBanner: (bannerId: string) => void;
-  onReorderBanners: (reordered: Banner[]) => void;
-}
-
-export const BannerSliderView: React.FC<BannerSliderViewProps> = ({
+export const BannerSliderView = ({
   banners,
   onAddBanner,
   onUpdateBanner,
   onDeleteBanner,
   onReorderBanners
 }) => {
-  const [selectedType, setSelectedType] = useState<BannerType | 'All'>('All');
+  const [selectedType, setSelectedType] = useState('All');
   const [searchTerm, setSearchTerm] = useState('');
   
   // Slider State
@@ -59,28 +50,14 @@ export const BannerSliderView: React.FC<BannerSliderViewProps> = ({
 
   // Modal State
   const [showModal, setShowModal] = useState(false);
-  const [editingBanner, setEditingBanner] = useState<Banner | null>(null);
+  const [editingBanner, setEditingBanner] = useState(null);
   const [showPopupPreview, setShowPopupPreview] = useState(false);
 
   // Toast State
-  const [toastNotice, setToastNotice] = useState<string | null>(null);
+  const [toastNotice, setToastNotice] = useState(null);
 
   // Form State
-  const [formData, setFormData] = useState<{
-    title: string;
-    subtitle: string;
-    type: BannerType;
-    category: string;
-    imageUrl: string;
-    badgeText: string;
-    ctaText: string;
-    ctaLink: string;
-    status: 'Active' | 'Inactive' | 'Scheduled';
-    discountTag: string;
-    startDate: string;
-    endDate: string;
-    backgroundColor: string;
-  }>({
+  const [formData, setFormData] = useState({
     title: '',
     subtitle: '',
     type: 'Homepage Banner',
@@ -96,7 +73,7 @@ export const BannerSliderView: React.FC<BannerSliderViewProps> = ({
     backgroundColor: 'from-slate-950 via-indigo-950 to-slate-900'
   });
 
-  const triggerToast = (msg: string) => {
+  const triggerToast = (msg) => {
     setToastNotice(msg);
     setTimeout(() => setToastNotice(null), 3500);
   };
@@ -134,7 +111,7 @@ export const BannerSliderView: React.FC<BannerSliderViewProps> = ({
   };
 
   // Reordering Handler (Move up / Move down / Drag-Sort simulation)
-  const handleMove = (index: number, direction: 'up' | 'down') => {
+  const handleMove = (index, direction) => {
     const list = [...filteredBanners];
     const targetIndex = direction === 'up' ? index - 1 : index + 1;
     if (targetIndex < 0 || targetIndex >= list.length) return;
@@ -159,7 +136,7 @@ export const BannerSliderView: React.FC<BannerSliderViewProps> = ({
     triggerToast(`Banner order updated! "${list[direction === 'up' ? index : targetIndex].title}" moved ${direction}.`);
   };
 
-  const openCreateModal = (type: BannerType = 'Homepage Banner') => {
+  const openCreateModal = (type = 'Homepage Banner') => {
     setEditingBanner(null);
     setFormData({
       title: 'Exclusive Summer Promo',
@@ -179,7 +156,7 @@ export const BannerSliderView: React.FC<BannerSliderViewProps> = ({
     setShowModal(true);
   };
 
-  const openEditModal = (banner: Banner) => {
+  const openEditModal = (banner) => {
     setEditingBanner(banner);
     setFormData({
       title: banner.title,
@@ -199,12 +176,12 @@ export const BannerSliderView: React.FC<BannerSliderViewProps> = ({
     setShowModal(true);
   };
 
-  const handleSubmitForm = (e: React.FormEvent) => {
+  const handleSubmitForm = (e) => {
     e.preventDefault();
     if (!formData.title.trim()) return;
 
     if (editingBanner) {
-      const updated: Banner = {
+      const updated = {
         ...editingBanner,
         title: formData.title,
         subtitle: formData.subtitle,
@@ -223,7 +200,7 @@ export const BannerSliderView: React.FC<BannerSliderViewProps> = ({
       onUpdateBanner(updated);
       triggerToast(`Banner "${formData.title}" updated successfully!`);
     } else {
-      const created: Banner = {
+      const created = {
         id: `BAN-${Date.now().toString().slice(-4)}`,
         title: formData.title,
         subtitle: formData.subtitle,
@@ -249,8 +226,8 @@ export const BannerSliderView: React.FC<BannerSliderViewProps> = ({
     setShowModal(false);
   };
 
-  const handleDuplicate = (banner: Banner) => {
-    const dup: Banner = {
+  const handleDuplicate = (banner) => {
+    const dup = {
       ...banner,
       id: `BAN-${Date.now().toString().slice(-4)}`,
       title: `${banner.title} (Copy)`,
@@ -262,7 +239,7 @@ export const BannerSliderView: React.FC<BannerSliderViewProps> = ({
     triggerToast(`Duplicated banner "${banner.title}"`);
   };
 
-  const handleToggleStatus = (banner: Banner) => {
+  const handleToggleStatus = (banner) => {
     const nextStatus = banner.status === 'Active' ? 'Inactive' : 'Active';
     onUpdateBanner({ ...banner, status: nextStatus });
     triggerToast(`Banner "${banner.title}" status changed to ${nextStatus}.`);
@@ -332,7 +309,7 @@ export const BannerSliderView: React.FC<BannerSliderViewProps> = ({
             <button
               key={tab.id}
               onClick={() => {
-                setSelectedType(tab.id as any);
+                setSelectedType(tab.id);
                 setCurrentSlideIndex(0);
               }}
               className={`p-3.5 rounded-2xl border text-left transition-all flex flex-col justify-between ${
@@ -704,7 +681,7 @@ export const BannerSliderView: React.FC<BannerSliderViewProps> = ({
                 <label className="text-slate-300 font-bold uppercase text-[10px] block mb-1">Banner Type</label>
                 <select
                   value={formData.type}
-                  onChange={(e) => setFormData({ ...formData, type: e.target.value as BannerType })}
+                  onChange={(e) => setFormData({ ...formData, type: e.target.value })}
                   className="w-full bg-slate-800 border border-slate-700 rounded-xl p-2.5 text-white font-bold focus:outline-none focus:border-indigo-500"
                 >
                   <option value="Homepage Banner">Homepage Banner (Hero Slider)</option>
@@ -843,7 +820,7 @@ export const BannerSliderView: React.FC<BannerSliderViewProps> = ({
                 <label className="text-slate-300 font-bold uppercase text-[10px] block mb-1">Publish Status</label>
                 <select
                   value={formData.status}
-                  onChange={(e) => setFormData({ ...formData, status: e.target.value as any })}
+                  onChange={(e) => setFormData({ ...formData, status: e.target.value })}
                   className="w-full bg-slate-800 border border-slate-700 rounded-xl p-2.5 text-white focus:outline-none focus:border-indigo-500"
                 >
                   <option value="Active">Active (Live in slider)</option>

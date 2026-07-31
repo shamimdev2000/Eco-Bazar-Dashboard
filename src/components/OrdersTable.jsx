@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { OrderItem, OrderStatus } from '../types';
 import { 
   Search, 
   Filter, 
@@ -17,15 +16,7 @@ import {
   FileText
 } from 'lucide-react';
 
-interface OrdersTableProps {
-  orders: OrderItem[];
-  selectedStatus: OrderStatus | 'All';
-  setSelectedStatus: (status: OrderStatus | 'All') => void;
-  onSelectOrder: (order: OrderItem) => void;
-  onUpdateStatus: (orderId: string, newStatus: OrderStatus) => void;
-}
-
-export const OrdersTable: React.FC<OrdersTableProps> = ({
+export const OrdersTable = ({
   orders,
   selectedStatus,
   setSelectedStatus,
@@ -33,8 +24,8 @@ export const OrdersTable: React.FC<OrdersTableProps> = ({
   onUpdateStatus
 }) => {
   const [tableSearch, setTableSearch] = useState('');
-  const [sortField, setSortField] = useState<'date' | 'amount'>('date');
-  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
+  const [sortField, setSortField] = useState('date');
+  const [sortOrder, setSortOrder] = useState('desc');
 
   // Filter orders
   const filtered = orders.filter((order) => {
@@ -59,7 +50,7 @@ export const OrdersTable: React.FC<OrdersTableProps> = ({
       : new Date(b.date).getTime() - new Date(a.date).getTime();
   });
 
-  const getStatusBadge = (status: OrderStatus) => {
+  const getStatusBadge = (status) => {
     switch (status) {
       case 'Pending':
         return (
@@ -88,7 +79,7 @@ export const OrdersTable: React.FC<OrdersTableProps> = ({
     }
   };
 
-  const toggleSort = (field: 'date' | 'amount') => {
+  const toggleSort = (field) => {
     if (sortField === field) {
       setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
     } else {
@@ -113,7 +104,7 @@ export const OrdersTable: React.FC<OrdersTableProps> = ({
 
         {/* Filter Pills */}
         <div className="flex flex-wrap items-center gap-1.5 bg-slate-800/80 p-1 rounded-lg border border-slate-700/80 text-xs">
-          {(['All', 'Pending', 'Processing', 'Delivered', 'Cancelled'] as (OrderStatus | 'All')[]).map((status) => (
+          {['All', 'Pending', 'Processing', 'Delivered', 'Cancelled'].map((status) => (
             <button
               key={status}
               onClick={() => setSelectedStatus(status)}
@@ -274,7 +265,7 @@ export const OrdersTable: React.FC<OrdersTableProps> = ({
                       {/* Quick Status Advance */}
                       <select
                         value={order.status}
-                        onChange={(e) => onUpdateStatus(order.id, e.target.value as OrderStatus)}
+                        onChange={(e) => onUpdateStatus(order.id, e.target.value)}
                         className="bg-slate-800 border border-slate-700 text-[11px] text-slate-200 rounded-lg px-2 py-1 focus:outline-none focus:ring-1 focus:ring-indigo-500"
                       >
                         <option value="Pending">Pending</option>

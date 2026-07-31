@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { InventoryItem } from '../types';
 import { 
   Package, 
   AlertTriangle, 
@@ -26,26 +25,7 @@ import {
 } from 'lucide-react';
 import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, Cell, Legend } from 'recharts';
 
-interface InventoryViewProps {
-  inventory: InventoryItem[];
-  onUpdateStock: (id: string, newStock: number) => void;
-  viewId?: string;
-}
-
-export interface StockHistoryRecord {
-  id: string;
-  timestamp: string;
-  productName: string;
-  sku: string;
-  previousStock: number;
-  newStock: number;
-  changeDelta: number;
-  reason: string;
-  performedBy: string;
-  notes?: string;
-}
-
-const INITIAL_STOCK_HISTORY: StockHistoryRecord[] = [
+const INITIAL_STOCK_HISTORY = [
   {
     id: 'sh-101',
     timestamp: '2026-07-27 11:30 AM',
@@ -108,12 +88,12 @@ const INITIAL_STOCK_HISTORY: StockHistoryRecord[] = [
   }
 ];
 
-export const InventoryView: React.FC<InventoryViewProps> = ({
+export const InventoryView = ({
   inventory,
   onUpdateStock,
   viewId
 }) => {
-  const [activeTab, setActiveTab] = useState<'stock' | 'low-stock' | 'out-of-stock' | 'history' | 'adjustment'>('stock');
+  const [activeTab, setActiveTab] = useState('stock');
 
   React.useEffect(() => {
     if (viewId === 'inventory-low') setActiveTab('low-stock');
@@ -123,22 +103,22 @@ export const InventoryView: React.FC<InventoryViewProps> = ({
     else if (viewId === 'inventory-stock' || viewId === 'inventory') setActiveTab('stock');
   }, [viewId]);
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState<string>('All');
+  const [selectedCategory, setSelectedCategory] = useState('All');
   
   // Quick inline edit state
-  const [editingItemId, setEditingItemId] = useState<string | null>(null);
-  const [tempStockValue, setTempStockValue] = useState<number>(0);
+  const [editingItemId, setEditingItemId] = useState(null);
+  const [tempStockValue, setTempStockValue] = useState(0);
 
   // Stock History log
-  const [historyLog, setHistoryLog] = useState<StockHistoryRecord[]>(INITIAL_STOCK_HISTORY);
+  const [historyLog, setHistoryLog] = useState(INITIAL_STOCK_HISTORY);
 
   // Stock Adjustment Form State
-  const [adjProductId, setAdjProductId] = useState<string>(inventory[0]?.id || '');
-  const [adjType, setAdjType] = useState<'add' | 'subtract' | 'set'>('add');
-  const [adjAmount, setAdjAmount] = useState<number>(10);
-  const [adjReason, setAdjReason] = useState<string>('Supplier Restock');
-  const [adjNotes, setAdjNotes] = useState<string>('');
-  const [adjSuccessMsg, setAdjSuccessMsg] = useState<string | null>(null);
+  const [adjProductId, setAdjProductId] = useState(inventory[0]?.id || '');
+  const [adjType, setAdjType] = useState('add');
+  const [adjAmount, setAdjAmount] = useState(10);
+  const [adjReason, setAdjReason] = useState('Supplier Restock');
+  const [adjNotes, setAdjNotes] = useState('');
+  const [adjSuccessMsg, setAdjSuccessMsg] = useState(null);
 
   // High level inventory calculations
   const lowStockThreshold = 10;
@@ -157,17 +137,17 @@ export const InventoryView: React.FC<InventoryViewProps> = ({
 
   // Helper to log a stock change
   const logStockChange = (
-    product: InventoryItem, 
-    prevStock: number, 
-    newStock: number, 
-    reason: string, 
-    notes?: string
+    product, 
+    prevStock, 
+    newStock, 
+    reason, 
+    notes
   ) => {
     const delta = newStock - prevStock;
     const now = new Date();
     const timeStr = `${now.toISOString().split('T')[0]} ${now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
     
-    const newRecord: StockHistoryRecord = {
+    const newRecord = {
       id: `sh-${Date.now()}`,
       timestamp: timeStr,
       productName: product.name,
@@ -184,7 +164,7 @@ export const InventoryView: React.FC<InventoryViewProps> = ({
   };
 
   // Quick adjustment handlers (+1 / -1 / batch reorder)
-  const handleStockAdjustment = (id: string, delta: number, reason: string = 'Manual Adjustment') => {
+  const handleStockAdjustment = (id, delta, reason = 'Manual Adjustment') => {
     const target = inventory.find(i => i.id === id);
     if (!target) return;
     const prevStock = target.stock;
@@ -193,7 +173,7 @@ export const InventoryView: React.FC<InventoryViewProps> = ({
     logStockChange(target, prevStock, updated, reason);
   };
 
-  const handleQuickReorder = (item: InventoryItem, reorderQty: number) => {
+  const handleQuickReorder = (item, reorderQty) => {
     const prevStock = item.stock;
     const newStock = prevStock + reorderQty;
     onUpdateStock(item.id, newStock);
@@ -201,7 +181,7 @@ export const InventoryView: React.FC<InventoryViewProps> = ({
     alert(`Successfully reordered +${reorderQty} units for "${item.name}". New Stock: ${newStock}`);
   };
 
-  const saveManualStockEdit = (id: string) => {
+  const saveManualStockEdit = (id) => {
     const target = inventory.find(i => i.id === id);
     if (!target) return;
     const prevStock = target.stock;
@@ -212,7 +192,7 @@ export const InventoryView: React.FC<InventoryViewProps> = ({
   };
 
   // Dedicated Stock Adjustment Form Submit
-  const handlePerformAdjustment = (e: React.FormEvent) => {
+  const handlePerformAdjustment = (e) => {
     e.preventDefault();
     const target = inventory.find(i => i.id === adjProductId);
     if (!target) {
@@ -704,7 +684,7 @@ export const InventoryView: React.FC<InventoryViewProps> = ({
                       <YAxis type="category" dataKey="category" stroke="#94a3b8" fontSize={11} width={80} />
                       <Tooltip
                         contentStyle={{ backgroundColor: '#0f172a', borderColor: '#334155', borderRadius: '0.75rem', color: '#fff' }}
-                        formatter={(val: any) => [`${val}x per year`, 'Turnover Rate']}
+                        formatter={(val) => [`${val}x per year`, 'Turnover Rate']}
                       />
                       <Bar dataKey="turnoverRate" fill="#10b981" radius={[0, 4, 4, 0]} />
                     </BarChart>

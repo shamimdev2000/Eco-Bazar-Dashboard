@@ -36,9 +36,9 @@ import {
 } from 'lucide-react';
 import { ResponsiveContainer, AreaChart, Area, XAxis, YAxis, Tooltip as RechartsTooltip, CartesianGrid } from 'recharts';
 
-export const UIComponentsShowroomView: React.FC = () => {
-  const [copiedComponent, setCopiedComponent] = useState<string | null>(null);
-  const [activeCategory, setActiveCategory] = useState<string>('All');
+export const UIComponentsShowroomView = () => {
+  const [copiedComponent, setCopiedComponent] = useState(null);
+  const [activeCategory, setActiveCategory] = useState('All');
 
   // INTERACTIVE STATES FOR COMPONENTS DEMO
   // 1. Button
@@ -61,25 +61,25 @@ export const UIComponentsShowroomView: React.FC = () => {
 
   // 8. Data Table
   const [tableSearch, setTableSearch] = useState('');
-  const [selectedRows, setSelectedRows] = useState<string[]>(['1', '3']);
+  const [selectedRows, setSelectedRows] = useState(['1', '3']);
 
   // 9. Calendar
-  const [selectedDate, setSelectedDate] = useState<number>(27);
+  const [selectedDate, setSelectedDate] = useState(27);
 
   // 11. Tabs
-  const [demoTab, setDemoTab] = useState<'overview' | 'analytics' | 'activity'>('overview');
+  const [demoTab, setDemoTab] = useState('overview');
 
   // 12. Accordion
-  const [openAccordion, setOpenAccordion] = useState<number | null>(0);
+  const [openAccordion, setOpenAccordion] = useState(0);
 
   // 13. Toast
-  const [activeToast, setActiveToast] = useState<{ type: 'success' | 'error' | 'info'; title: string; desc: string } | null>(null);
+  const [activeToast, setActiveToast] = useState(null);
 
   // 14. Progress
   const [progressVal, setProgressVal] = useState(68);
 
   // 17. Tooltip
-  const [tooltipActive, setTooltipActive] = useState<string | null>(null);
+  const [tooltipActive, setTooltipActive] = useState(null);
 
   // 19. Pagination
   const [currentPage, setCurrentPage] = useState(2);
@@ -99,7 +99,7 @@ export const UIComponentsShowroomView: React.FC = () => {
   // 26. Resizable Panels
   const [leftPanelWidth, setLeftPanelWidth] = useState(50); // percentage
 
-  const triggerToastAlert = (type: 'success' | 'error' | 'info', title: string, desc: string) => {
+  const triggerToastAlert = (type, title, desc) => {
     setActiveToast({ type, title, desc });
     setTimeout(() => setActiveToast(null), 3500);
   };
@@ -120,7 +120,7 @@ export const UIComponentsShowroomView: React.FC = () => {
     { day: 'Sun', revenue: 11200, users: 740 },
   ];
 
-  const handleOtpChange = (index: number, val: string) => {
+  const handleOtpChange = (index, val) => {
     if (val.length > 1) val = val.slice(-1);
     const updated = [...otpValues];
     updated[index] = val;
@@ -551,7 +551,7 @@ export const UIComponentsShowroomView: React.FC = () => {
             <span className="text-[10px] font-mono text-slate-500">Navigation</span>
           </div>
           <div className="bg-slate-950 p-1.5 rounded-xl border border-slate-800 flex gap-1">
-            {(['overview', 'analytics', 'activity'] as const).map((t) => (
+            {['overview', 'analytics', 'activity'].map((t) => (
               <button
                 key={t}
                 onClick={() => setDemoTab(t)}

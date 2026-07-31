@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { AdminViewId } from '../types';
 import {
   LayoutDashboard,
   ShoppingBag,
@@ -32,32 +31,7 @@ import {
   LogOut
 } from 'lucide-react';
 
-interface SidebarProps {
-  currentView: AdminViewId;
-  onNavigate: (viewId: AdminViewId) => void;
-  isOpen?: boolean;
-  onCloseMobile?: () => void;
-  lowStockCount?: number;
-  pendingOrdersCount?: number;
-  currentUser?: { name: string; email: string; role: string };
-  onLogout?: () => void;
-}
-
-interface NavGroup {
-  id: string;
-  label: string;
-  icon: React.ReactNode;
-  badge?: string | number;
-  badgeColor?: string;
-  defaultView?: AdminViewId;
-  children?: {
-    id: AdminViewId;
-    label: string;
-    badge?: string | number;
-  }[];
-}
-
-export const Sidebar: React.FC<SidebarProps> = ({
+export const Sidebar = ({
   currentView,
   onNavigate,
   isOpen = true,
@@ -67,7 +41,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
   currentUser = { name: 'Alexander Wright', email: 'admin@ecobazar.io', role: 'Super Admin' },
   onLogout
 }) => {
-  const getInitials = (name: string) => {
+  const getInitials = (name) => {
     return name
       .split(' ')
       .map(part => part[0])
@@ -76,21 +50,21 @@ export const Sidebar: React.FC<SidebarProps> = ({
       .slice(0, 2) || 'AD';
   };
   // Track expanded parent accordions
-  const [expandedGroups, setExpandedGroups] = useState<Record<string, boolean>>({
+  const [expandedGroups, setExpandedGroups] = useState({
     products: currentView.startsWith('products-'),
     orders: currentView.startsWith('orders-'),
     customers: currentView.startsWith('customers-'),
     inventory: currentView.startsWith('inventory'),
   });
 
-  const toggleGroup = (groupId: string) => {
+  const toggleGroup = (groupId) => {
     setExpandedGroups(prev => ({
       ...prev,
       [groupId]: !prev[groupId]
     }));
   };
 
-  const navGroups: NavGroup[] = [
+  const navGroups = [
     {
       id: 'dashboard',
       label: 'Dashboard',

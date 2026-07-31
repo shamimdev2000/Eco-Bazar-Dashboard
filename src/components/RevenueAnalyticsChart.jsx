@@ -11,22 +11,17 @@ import {
   Line,
   ComposedChart
 } from 'recharts';
-import { RevenueAnalyticsPoint } from '../types';
 import { DollarSign, PieChart, Target } from 'lucide-react';
 
-interface RevenueAnalyticsChartProps {
-  data: RevenueAnalyticsPoint[];
-}
-
-export const RevenueAnalyticsChart: React.FC<RevenueAnalyticsChartProps> = ({ data }) => {
-  const [showTarget, setShowTarget] = useState<boolean>(true);
+export const RevenueAnalyticsChart = ({ data }) => {
+  const [showTarget, setShowTarget] = useState(true);
 
   const totalRev = data.reduce((acc, curr) => acc + curr.revenue, 0);
   const totalCost = data.reduce((acc, curr) => acc + curr.cost, 0);
   const totalProfit = totalRev - totalCost;
   const profitMargin = ((totalProfit / totalRev) * 100).toFixed(1);
 
-  const formatK = (val: number) => `$${(val / 1000).toFixed(0)}k`;
+  const formatK = (val) => `$${(val / 1000).toFixed(0)}k`;
 
   return (
     <div id="chart-revenue-analytics" className="bg-slate-900 border border-slate-800 rounded-xl p-5 shadow-sm">
@@ -109,7 +104,7 @@ export const RevenueAnalyticsChart: React.FC<RevenueAnalyticsChartProps> = ({ da
                 fontSize: '12px',
                 boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.5)'
               }}
-              formatter={(value: number, name: string) => [`$${value.toLocaleString()}`, name]}
+              formatter={(value, name) => [`$${value.toLocaleString()}`, name]}
               labelStyle={{ color: '#94a3b8', fontWeight: 600 }}
             />
             <Legend 

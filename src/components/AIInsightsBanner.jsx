@@ -1,7 +1,7 @@
 import React from 'react';
 import { Sparkles, TrendingUp, AlertTriangle, ShieldCheck } from 'lucide-react';
 
-export const AIInsightsBanner: React.FC = () => {
+export const AIInsightsBanner = () => {
   return (
     <div className="bg-gradient-to-r from-indigo-950/80 via-slate-900 to-slate-900 border border-indigo-800/50 rounded-xl p-4 sm:p-5 shadow-lg relative overflow-hidden">
       <div className="absolute -right-10 -bottom-10 w-40 h-40 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none"></div>

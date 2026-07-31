@@ -6,17 +6,12 @@ import {
   Tooltip, 
   ResponsiveContainer 
 } from 'recharts';
-import { CategorySale } from '../types';
 import { PieChart, Layers } from 'lucide-react';
 
-interface CategorySalesChartProps {
-  categories: CategorySale[];
-}
-
-export const CategorySalesChart: React.FC<CategorySalesChartProps> = ({ categories }) => {
+export const CategorySalesChart = ({ categories }) => {
   const totalRevenue = categories.reduce((acc, curr) => acc + curr.revenue, 0);
 
-  const formatCurrency = (val: number) => {
+  const formatCurrency = (val) => {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
       currency: 'USD',
@@ -74,7 +69,7 @@ export const CategorySalesChart: React.FC<CategorySalesChartProps> = ({ categori
                   fontSize: '12px',
                   boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.5)'
                 }}
-                formatter={(val: number) => [`$${val.toLocaleString()}`, 'Revenue']}
+                formatter={(val) => [`$${val.toLocaleString()}`, 'Revenue']}
               />
             </RechartsPieChart>
           </ResponsiveContainer>

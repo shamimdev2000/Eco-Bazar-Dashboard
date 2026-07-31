@@ -1,5 +1,4 @@
 import React, { useState, useMemo } from 'react';
-import { TimeRange, OrderStatus, OrderItem, AdminViewId, Customer, InventoryItem, Coupon, Banner, ProductReview, BlogArticle, BlogCategory, BlogComment, StoreSettings, SystemNotificationItem } from './types';
 import { 
   INITIAL_ORDERS, 
   TOP_PRODUCTS, 
@@ -65,10 +64,10 @@ import {
 } from 'lucide-react';
 
 export default function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => {
+  const [isAuthenticated, setIsAuthenticated] = useState(() => {
     return localStorage.getItem('ecobazar_admin_auth') !== 'false';
   });
-  const [currentUser, setCurrentUser] = useState<{ name: string; email: string; role: string }>(() => {
+  const [currentUser, setCurrentUser] = useState(() => {
     const savedUser = localStorage.getItem('ecobazar_admin_user');
     if (savedUser) {
       try {
@@ -84,7 +83,7 @@ export default function App() {
     };
   });
 
-  const handleLogin = (user: { name: string; email: string; role: string }) => {
+  const handleLogin = (user) => {
     setCurrentUser(user);
     setIsAuthenticated(true);
     localStorage.setItem('ecobazar_admin_auth', 'true');
@@ -96,28 +95,28 @@ export default function App() {
     localStorage.setItem('ecobazar_admin_auth', 'false');
   };
 
-  const [currentView, setCurrentView] = useState<AdminViewId>('dashboard');
-  const [timeRange, setTimeRange] = useState<TimeRange>('30d');
-  const [selectedStatusFilter, setSelectedStatusFilter] = useState<OrderStatus | 'All'>('All');
-  const [searchQuery, setSearchQuery] = useState<string>('');
+  const [currentView, setCurrentView] = useState('dashboard');
+  const [timeRange, setTimeRange] = useState('30d');
+  const [selectedStatusFilter, setSelectedStatusFilter] = useState('All');
+  const [searchQuery, setSearchQuery] = useState('');
   
-  const [orders, setOrders] = useState<OrderItem[]>(INITIAL_ORDERS);
-  const [customers, setCustomers] = useState<Customer[]>(INITIAL_CUSTOMERS);
-  const [inventory, setInventory] = useState<InventoryItem[]>(INITIAL_INVENTORY);
-  const [coupons, setCoupons] = useState<Coupon[]>(INITIAL_COUPONS);
-  const [banners, setBanners] = useState<Banner[]>(INITIAL_BANNERS);
-  const [reviews, setReviews] = useState<ProductReview[]>(INITIAL_REVIEWS);
-  const [blogs, setBlogs] = useState<BlogArticle[]>(INITIAL_BLOGS);
-  const [blogCategories, setBlogCategories] = useState<BlogCategory[]>(INITIAL_BLOG_CATEGORIES);
-  const [blogComments, setBlogComments] = useState<BlogComment[]>(INITIAL_BLOG_COMMENTS);
-  const [storeSettings, setStoreSettings] = useState<StoreSettings>(INITIAL_STORE_SETTINGS);
-  const [notifications, setNotifications] = useState<SystemNotificationItem[]>(INITIAL_NOTIFICATIONS);
+  const [orders, setOrders] = useState(INITIAL_ORDERS);
+  const [customers, setCustomers] = useState(INITIAL_CUSTOMERS);
+  const [inventory, setInventory] = useState(INITIAL_INVENTORY);
+  const [coupons, setCoupons] = useState(INITIAL_COUPONS);
+  const [banners, setBanners] = useState(INITIAL_BANNERS);
+  const [reviews, setReviews] = useState(INITIAL_REVIEWS);
+  const [blogs, setBlogs] = useState(INITIAL_BLOGS);
+  const [blogCategories, setBlogCategories] = useState(INITIAL_BLOG_CATEGORIES);
+  const [blogComments, setBlogComments] = useState(INITIAL_BLOG_COMMENTS);
+  const [storeSettings, setStoreSettings] = useState(INITIAL_STORE_SETTINGS);
+  const [notifications, setNotifications] = useState(INITIAL_NOTIFICATIONS);
 
-  const handleSaveStoreSettings = (updated: StoreSettings) => {
+  const handleSaveStoreSettings = (updated) => {
     setStoreSettings(updated);
   };
 
-  const handleMarkNotifRead = (id: string) => {
+  const handleMarkNotifRead = (id) => {
     setNotifications(prev => prev.map(n => n.id === id ? { ...n, read: true } : n));
   };
 
@@ -125,56 +124,56 @@ export default function App() {
     setNotifications(prev => prev.map(n => ({ ...n, read: true })));
   };
 
-  const handleDeleteNotif = (id: string) => {
+  const handleDeleteNotif = (id) => {
     setNotifications(prev => prev.filter(n => n.id !== id));
   };
 
-  const handleAddNotif = (newNotif: SystemNotificationItem) => {
+  const handleAddNotif = (newNotif) => {
     setNotifications(prev => [newNotif, ...prev]);
   };
 
-  const [selectedOrderModal, setSelectedOrderModal] = useState<OrderItem | null>(null);
-  const [selectedCustomerModal, setSelectedCustomerModal] = useState<Customer | null>(null);
-  const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
-  const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(true);
+  const [selectedOrderModal, setSelectedOrderModal] = useState(null);
+  const [selectedCustomerModal, setSelectedCustomerModal] = useState(null);
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
-  const handleAddCoupon = (newCoupon: Coupon) => {
+  const handleAddCoupon = (newCoupon) => {
     setCoupons(prev => [newCoupon, ...prev]);
   };
 
-  const handleUpdateCoupon = (updatedCoupon: Coupon) => {
+  const handleUpdateCoupon = (updatedCoupon) => {
     setCoupons(prev => prev.map(c => c.id === updatedCoupon.id ? updatedCoupon : c));
   };
 
-  const handleDeleteCoupon = (couponId: string) => {
+  const handleDeleteCoupon = (couponId) => {
     setCoupons(prev => prev.filter(c => c.id !== couponId));
   };
 
-  const handleAddBanner = (newBanner: Banner) => {
+  const handleAddBanner = (newBanner) => {
     setBanners(prev => [newBanner, ...prev]);
   };
 
-  const handleUpdateBanner = (updatedBanner: Banner) => {
+  const handleUpdateBanner = (updatedBanner) => {
     setBanners(prev => prev.map(b => b.id === updatedBanner.id ? updatedBanner : b));
   };
 
-  const handleDeleteBanner = (bannerId: string) => {
+  const handleDeleteBanner = (bannerId) => {
     setBanners(prev => prev.filter(b => b.id !== bannerId));
   };
 
-  const handleReorderBanners = (reordered: Banner[]) => {
+  const handleReorderBanners = (reordered) => {
     setBanners(reordered);
   };
 
-  const handleApproveReview = (reviewId: string) => {
+  const handleApproveReview = (reviewId) => {
     setReviews(prev => prev.map(r => r.id === reviewId ? { ...r, status: 'Approved' } : r));
   };
 
-  const handleRejectReview = (reviewId: string) => {
+  const handleRejectReview = (reviewId) => {
     setReviews(prev => prev.map(r => r.id === reviewId ? { ...r, status: 'Rejected' } : r));
   };
 
-  const handleReplyReview = (reviewId: string, replyText: string) => {
+  const handleReplyReview = (reviewId, replyText) => {
     const nowStr = new Date().toISOString().replace('T', ' ').slice(0, 16);
     setReviews(prev => prev.map(r => r.id === reviewId ? {
       ...r,
@@ -186,31 +185,31 @@ export default function App() {
     } : r));
   };
 
-  const handleDeleteReview = (reviewId: string) => {
+  const handleDeleteReview = (reviewId) => {
     setReviews(prev => prev.filter(r => r.id !== reviewId));
   };
 
-  const handleAddBlogArticle = (article: BlogArticle) => {
+  const handleAddBlogArticle = (article) => {
     setBlogs(prev => [article, ...prev]);
   };
 
-  const handleUpdateBlogArticle = (article: BlogArticle) => {
+  const handleUpdateBlogArticle = (article) => {
     setBlogs(prev => prev.map(a => a.id === article.id ? article : a));
   };
 
-  const handleDeleteBlogArticle = (articleId: string) => {
+  const handleDeleteBlogArticle = (articleId) => {
     setBlogs(prev => prev.filter(a => a.id !== articleId));
   };
 
-  const handleAddBlogCategory = (category: BlogCategory) => {
+  const handleAddBlogCategory = (category) => {
     setBlogCategories(prev => [...prev, category]);
   };
 
-  const handleApproveBlogComment = (commentId: string) => {
+  const handleApproveBlogComment = (commentId) => {
     setBlogComments(prev => prev.map(c => c.id === commentId ? { ...c, status: 'Approved' } : c));
   };
 
-  const handleDeleteBlogComment = (commentId: string) => {
+  const handleDeleteBlogComment = (commentId) => {
     setBlogComments(prev => prev.filter(c => c.id !== commentId));
   };
 
@@ -226,7 +225,7 @@ export default function App() {
   const cancelledCount = useMemo(() => orders.filter(o => o.status === 'Cancelled').length, [orders]);
 
   // Timeframe scalers
-  const timeMultipliers: Record<TimeRange, number> = {
+  const timeMultipliers = {
     '7d': 0.25,
     '30d': 1.0,
     '90d': 2.8,
@@ -234,21 +233,21 @@ export default function App() {
     'ytd': 6.8
   };
 
-  const currentMultiplier = timeMultipliers[timeRange];
+  const currentMultiplier = timeMultipliers[timeRange] || 1.0;
   const totalOrdersCount = Math.round(1613 * currentMultiplier);
   const totalRevenueAmount = Math.round(194000 * currentMultiplier);
   const totalProductsCount = inventory.length;
   const totalCustomersCount = customers.length;
 
   // Handlers
-  const handleUpdateOrderStatus = (orderId: string, newStatus: OrderStatus) => {
+  const handleUpdateOrderStatus = (orderId, newStatus) => {
     setOrders(prev => prev.map(o => o.id === orderId ? { ...o, status: newStatus } : o));
     if (selectedOrderModal && selectedOrderModal.id === orderId) {
       setSelectedOrderModal(prev => prev ? { ...prev, status: newStatus } : null);
     }
   };
 
-  const handleUpdateStock = (id: string, newStock: number) => {
+  const handleUpdateStock = (id, newStock) => {
     setInventory(prev => prev.map(item => {
       if (item.id === id) {
         const updatedStatus = newStock === 0 ? 'Out of Stock' : newStock < 10 ? 'Low Stock' : 'In Stock';

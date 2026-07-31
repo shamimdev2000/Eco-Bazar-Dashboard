@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { Customer, CustomerSegmentSummary, CustomerSegmentType } from '../types';
 import { CUSTOMER_SEGMENT_SUMMARIES } from '../data/mockData';
 import { 
   Users, 
@@ -21,20 +20,15 @@ import {
 } from 'lucide-react';
 import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, Cell, Legend, PieChart, Pie } from 'recharts';
 
-interface CustomerSegmentationViewProps {
-  customers: Customer[];
-  onSelectCustomer?: (customer: Customer) => void;
-}
-
-export const CustomerSegmentationView: React.FC<CustomerSegmentationViewProps> = ({
+export const CustomerSegmentationView = ({
   customers,
   onSelectCustomer
 }) => {
-  const [selectedSegment, setSelectedSegment] = useState<CustomerSegmentType | 'All'>('All');
+  const [selectedSegment, setSelectedSegment] = useState('All');
   const [searchQuery, setSearchQuery] = useState('');
-  const [activeTab, setActiveTab] = useState<'overview' | 'customers' | 'comparison'>('overview');
+  const [activeTab, setActiveTab] = useState('overview');
 
-  const getSegmentIcon = (segment: CustomerSegmentType) => {
+  const getSegmentIcon = (segment) => {
     switch (segment) {
       case 'High-Value Customers':
         return <Crown className="w-5 h-5 text-amber-400" />;
@@ -47,7 +41,7 @@ export const CustomerSegmentationView: React.FC<CustomerSegmentationViewProps> =
     }
   };
 
-  const getSegmentBadgeColor = (segment: CustomerSegmentType) => {
+  const getSegmentBadgeColor = (segment) => {
     switch (segment) {
       case 'High-Value Customers':
         return 'bg-amber-500/10 text-amber-400 border-amber-500/20';
@@ -228,7 +222,7 @@ export const CustomerSegmentationView: React.FC<CustomerSegmentationViewProps> =
                   <YAxis stroke="#64748b" fontSize={12} tickLine={false} tickFormatter={(val) => `$${val / 1000}k`} />
                   <Tooltip
                     contentStyle={{ backgroundColor: '#0f172a', borderColor: '#334155', borderRadius: '0.75rem', color: '#fff' }}
-                    formatter={(value: any, name: any) => [
+                    formatter={(value, name) => [
                       name === 'revenue' ? `$${Number(value).toLocaleString()}` : `${value} orders`,
                       name === 'revenue' ? 'Revenue Contribution' : 'Order Volume'
                     ]}
@@ -271,7 +265,7 @@ export const CustomerSegmentationView: React.FC<CustomerSegmentationViewProps> =
                     </Pie>
                     <Tooltip
                       contentStyle={{ backgroundColor: '#0f172a', borderColor: '#334155', borderRadius: '0.75rem', color: '#fff' }}
-                      formatter={(val: any) => [`$${Number(val).toLocaleString()}`, 'Revenue']}
+                      formatter={(val) => [`$${Number(val).toLocaleString()}`, 'Revenue']}
                     />
                   </PieChart>
                 </ResponsiveContainer>

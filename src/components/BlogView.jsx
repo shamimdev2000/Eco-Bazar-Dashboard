@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { BlogArticle, BlogCategory, BlogComment } from '../types';
 import { 
   FileText, 
   Plus, 
@@ -22,19 +21,7 @@ import {
   HelpCircle
 } from 'lucide-react';
 
-interface BlogViewProps {
-  articles: BlogArticle[];
-  categories: BlogCategory[];
-  comments: BlogComment[];
-  onAddArticle: (article: BlogArticle) => void;
-  onUpdateArticle: (article: BlogArticle) => void;
-  onDeleteArticle: (articleId: string) => void;
-  onAddCategory: (category: BlogCategory) => void;
-  onApproveComment: (commentId: string) => void;
-  onDeleteComment: (commentId: string) => void;
-}
-
-export const BlogView: React.FC<BlogViewProps> = ({
+export const BlogView = ({
   articles,
   categories,
   comments,
@@ -45,7 +32,7 @@ export const BlogView: React.FC<BlogViewProps> = ({
   onApproveComment,
   onDeleteComment
 }) => {
-  const [activeTab, setActiveTab] = useState<'articles' | 'categories' | 'comments' | 'seo'>('articles');
+  const [activeTab, setActiveTab] = useState('articles');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategoryFilter, setSelectedCategoryFilter] = useState('All');
 
@@ -57,7 +44,7 @@ export const BlogView: React.FC<BlogViewProps> = ({
   const [formTitle, setFormTitle] = useState('');
   const [formCategory, setFormCategory] = useState(categories[0]?.name || 'Tech & Electronics');
   const [formAuthor, setFormAuthor] = useState('Apex Editorial');
-  const [formStatus, setFormStatus] = useState<'Published' | 'Draft'>('Published');
+  const [formStatus, setFormStatus] = useState('Published');
   const [formImageUrl, setFormImageUrl] = useState('');
   const [formExcerpt, setFormExcerpt] = useState('');
   const [formContent, setFormContent] = useState('');
@@ -71,9 +58,9 @@ export const BlogView: React.FC<BlogViewProps> = ({
   const [catDesc, setCatDesc] = useState('');
 
   // Toast State
-  const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const [toastMessage, setToastMessage] = useState(null);
 
-  const triggerToast = (msg: string) => {
+  const triggerToast = (msg) => {
     setToastMessage(msg);
     setTimeout(() => setToastMessage(null), 3000);
   };
@@ -93,7 +80,7 @@ export const BlogView: React.FC<BlogViewProps> = ({
     setIsArticleModalOpen(true);
   };
 
-  const openEditArticleModal = (art: BlogArticle) => {
+  const openEditArticleModal = (art) => {
     setEditingArticle(art);
     setFormTitle(art.title);
     setFormCategory(art.category);
@@ -108,7 +95,7 @@ export const BlogView: React.FC<BlogViewProps> = ({
     setIsArticleModalOpen(true);
   };
 
-  const handleSaveArticle = (e: React.FormEvent) => {
+  const handleSaveArticle = (e) => {
     e.preventDefault();
     if (!formTitle.trim()) return;
 
@@ -116,7 +103,7 @@ export const BlogView: React.FC<BlogViewProps> = ({
     const today = new Date().toISOString().split('T')[0];
 
     if (editingArticle) {
-      const updated: BlogArticle = {
+      const updated = {
         ...editingArticle,
         title: formTitle,
         slug,
@@ -133,7 +120,7 @@ export const BlogView: React.FC<BlogViewProps> = ({
       onUpdateArticle(updated);
       triggerToast(`Updated blog article "${formTitle}"`);
     } else {
-      const newArticle: BlogArticle = {
+      const newArticle = {
         id: `BLOG-${Date.now()}`,
         title: formTitle,
         slug,
@@ -157,11 +144,11 @@ export const BlogView: React.FC<BlogViewProps> = ({
     setIsArticleModalOpen(false);
   };
 
-  const handleSaveCategory = (e: React.FormEvent) => {
+  const handleSaveCategory = (e) => {
     e.preventDefault();
     if (!catName.trim()) return;
 
-    const newCat: BlogCategory = {
+    const newCat = {
       id: `CAT-B${Date.now()}`,
       name: catName,
       slug: catName.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
@@ -175,7 +162,7 @@ export const BlogView: React.FC<BlogViewProps> = ({
     setIsCategoryModalOpen(false);
   };
 
-  const handleDelete = (art: BlogArticle) => {
+  const handleDelete = (art) => {
     if (confirm(`Delete blog post "${art.title}" permanently?`)) {
       onDeleteArticle(art.id);
       triggerToast(`Deleted blog article`);
@@ -238,7 +225,7 @@ export const BlogView: React.FC<BlogViewProps> = ({
             return (
               <button
                 key={tab.id}
-                onClick={() => setActiveTab(tab.id as any)}
+                onClick={() => setActiveTab(tab.id)}
                 className={`px-4 py-2 rounded-xl text-xs font-bold transition-all border flex items-center gap-2 ${
                   isSelected
                     ? 'bg-indigo-600 text-white border-indigo-500 shadow-md shadow-indigo-600/20'
@@ -577,7 +564,7 @@ export const BlogView: React.FC<BlogViewProps> = ({
                   <label className="text-slate-300 font-bold uppercase text-[10px] block mb-1">Status</label>
                   <select
                     value={formStatus}
-                    onChange={(e) => setFormStatus(e.target.value as any)}
+                    onChange={(e) => setFormStatus(e.target.value)}
                     className="w-full bg-slate-800 border border-slate-700 rounded-xl p-2.5 text-white focus:outline-none font-bold"
                   >
                     <option value="Published">Published</option>

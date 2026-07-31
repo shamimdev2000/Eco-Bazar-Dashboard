@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { StoreSettings } from '../types';
 import { 
   Settings, 
   Store, 
@@ -25,30 +24,23 @@ import {
   Code
 } from 'lucide-react';
 
-interface SettingsViewProps {
-  settings: StoreSettings;
-  onSaveSettings: (updated: StoreSettings) => void;
-}
-
-export const SettingsView: React.FC<SettingsViewProps> = ({
+export const SettingsView = ({
   settings,
   onSaveSettings
 }) => {
-  const [activeTab, setActiveTab] = useState<
-    'general' | 'tax-shipping' | 'payments' | 'smtp-social' | 'seo-tracking'
-  >('general');
+  const [activeTab, setActiveTab] = useState('general');
 
-  const [formData, setFormData] = useState<StoreSettings>({ ...settings });
+  const [formData, setFormData] = useState({ ...settings });
   const [newDeliveryArea, setNewDeliveryArea] = useState('');
   const [newCountry, setNewCountry] = useState('');
-  const [toastMsg, setToastMsg] = useState<string | null>(null);
+  const [toastMsg, setToastMsg] = useState(null);
 
-  const triggerToast = (msg: string) => {
+  const triggerToast = (msg) => {
     setToastMsg(msg);
     setTimeout(() => setToastMsg(null), 3000);
   };
 
-  const handleSave = (e: React.FormEvent) => {
+  const handleSave = (e) => {
     e.preventDefault();
     onSaveSettings(formData);
     triggerToast('Store settings saved & synced successfully!');
@@ -64,7 +56,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
     triggerToast('Added delivery zone');
   };
 
-  const handleRemoveDeliveryArea = (index: number) => {
+  const handleRemoveDeliveryArea = (index) => {
     setFormData(prev => ({
       ...prev,
       deliveryAreas: prev.deliveryAreas.filter((_, i) => i !== index)
@@ -81,7 +73,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
     triggerToast('Added supported country');
   };
 
-  const handleRemoveCountry = (index: number) => {
+  const handleRemoveCountry = (index) => {
     setFormData(prev => ({
       ...prev,
       supportedCountries: prev.supportedCountries.filter((_, i) => i !== index)
@@ -138,7 +130,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
             return (
               <button
                 key={tab.id}
-                onClick={() => setActiveTab(tab.id as any)}
+                onClick={() => setActiveTab(tab.id)}
                 className={`px-4 py-2 rounded-xl text-xs font-bold transition-all border flex items-center gap-2 ${
                   isSelected
                     ? 'bg-indigo-600 text-white border-indigo-500 shadow-md shadow-indigo-600/20'
@@ -200,7 +192,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
                   value={formData.currency}
                   onChange={(e) => {
                     const curr = e.target.value;
-                    const symbols: Record<string, string> = { USD: '$', EUR: '€', GBP: '£', JPY: '¥', CAD: 'CA$', AUD: 'A$' };
+                    const symbols = { USD: '$', EUR: '€', GBP: '£', JPY: '¥', CAD: 'CA$', AUD: 'A$' };
                     setFormData({
                       ...formData,
                       currency: curr,
@@ -259,7 +251,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
                   <label className="text-xs font-bold text-slate-300 uppercase tracking-wider block">Tax Display Type</label>
                   <select
                     value={formData.taxType}
-                    onChange={(e) => setFormData({ ...formData, taxType: e.target.value as any })}
+                    onChange={(e) => setFormData({ ...formData, taxType: e.target.value })}
                     className="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-white text-xs font-bold focus:outline-none focus:border-indigo-500"
                   >
                     <option value="Exclusive">Exclusive (Calculated at checkout)</option>
@@ -551,7 +543,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
                   <label className="text-[10px] font-bold text-slate-400 uppercase font-mono block mb-1">Encryption</label>
                   <select
                     value={formData.smtp.encryption}
-                    onChange={(e) => setFormData({ ...formData, smtp: { ...formData.smtp, encryption: e.target.value as any } })}
+                    onChange={(e) => setFormData({ ...formData, smtp: { ...formData.smtp, encryption: e.target.value } })}
                     className="w-full bg-slate-950 border border-slate-800 rounded-xl p-2.5 text-xs text-white font-bold focus:outline-none"
                   >
                     <option value="TLS">TLS (Port 587)</option>
@@ -604,7 +596,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
                     <label className="text-[10px] font-bold text-slate-400 uppercase font-mono block mb-1">{key}</label>
                     <input
                       type="url"
-                      value={(formData.socialLinks as any)[key]}
+                      value={formData.socialLinks[key]}
                       onChange={(e) => setFormData({
                         ...formData,
                         socialLinks: { ...formData.socialLinks, [key]: e.target.value }

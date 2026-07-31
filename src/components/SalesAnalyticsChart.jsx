@@ -8,15 +8,10 @@ import {
   Tooltip, 
   ResponsiveContainer 
 } from 'recharts';
-import { SalesAnalyticsPoint } from '../types';
 import { TrendingUp, ShoppingBag, Percent, DollarSign } from 'lucide-react';
 
-interface SalesAnalyticsChartProps {
-  data: SalesAnalyticsPoint[];
-}
-
-export const SalesAnalyticsChart: React.FC<SalesAnalyticsChartProps> = ({ data }) => {
-  const [metric, setMetric] = useState<'sales' | 'orders' | 'conversionRate'>('sales');
+export const SalesAnalyticsChart = ({ data }) => {
+  const [metric, setMetric] = useState('sales');
 
   const totalSales = data.reduce((acc, curr) => acc + curr.sales, 0);
   const totalOrders = data.reduce((acc, curr) => acc + curr.orders, 0);
@@ -25,7 +20,7 @@ export const SalesAnalyticsChart: React.FC<SalesAnalyticsChartProps> = ({ data }
   // Find peak day
   const peakPoint = [...data].sort((a, b) => b.sales - a.sales)[0];
 
-  const formatYAxis = (value: number) => {
+  const formatYAxis = (value) => {
     if (metric === 'sales') {
       return `$${(value / 1000).toFixed(0)}k`;
     }
@@ -150,7 +145,7 @@ export const SalesAnalyticsChart: React.FC<SalesAnalyticsChartProps> = ({ data }
                 fontSize: '12px',
                 boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.5)'
               }}
-              formatter={(val: number) => {
+              formatter={(val) => {
                 if (metric === 'sales') return [`$${val.toLocaleString()}`, 'Daily Revenue'];
                 if (metric === 'conversionRate') return [`${val}%`, 'Conversion Rate'];
                 return [`${val} orders`, 'Orders'];

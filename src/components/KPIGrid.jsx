@@ -1,5 +1,4 @@
 import React from 'react';
-import { OrderStatus, TimeRange } from '../types';
 import { 
   DollarSign, 
   ShoppingBag, 
@@ -14,21 +13,7 @@ import {
   ArrowRight
 } from 'lucide-react';
 
-interface KPIGridProps {
-  timeRange: TimeRange;
-  selectedStatus: OrderStatus | 'All';
-  onSelectStatusFilter: (status: OrderStatus | 'All') => void;
-  pendingCount: number;
-  processingCount: number;
-  deliveredCount: number;
-  cancelledCount: number;
-  totalOrdersCount: number;
-  totalRevenueAmount: number;
-  totalProductsCount: number;
-  totalCustomersCount: number;
-}
-
-export const KPIGrid: React.FC<KPIGridProps> = ({
+export const KPIGrid = ({
   timeRange,
   selectedStatus,
   onSelectStatusFilter,
@@ -41,7 +26,7 @@ export const KPIGrid: React.FC<KPIGridProps> = ({
   totalProductsCount,
   totalCustomersCount
 }) => {
-  const formatCurrency = (val: number) => {
+  const formatCurrency = (val) => {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
       currency: 'USD',
@@ -49,7 +34,7 @@ export const KPIGrid: React.FC<KPIGridProps> = ({
     }).format(val);
   };
 
-  const formatNumber = (val: number) => {
+  const formatNumber = (val) => {
     return new Intl.NumberFormat('en-US').format(val);
   };
 

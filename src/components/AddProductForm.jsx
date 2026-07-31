@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { AdminViewId } from '../types';
 import { 
   ShoppingBag, 
   Plus, 
@@ -33,12 +32,7 @@ import {
   FileText
 } from 'lucide-react';
 
-interface AddProductFormProps {
-  onNavigate: (viewId: AdminViewId) => void;
-  onSuccess?: () => void;
-}
-
-export const AddProductForm: React.FC<AddProductFormProps> = ({ onNavigate, onSuccess }) => {
+export const AddProductForm = ({ onNavigate, onSuccess }) => {
   // 1. Basic Product Info
   const [productName, setProductName] = useState('');
   const [slug, setSlug] = useState('');
@@ -50,31 +44,31 @@ export const AddProductForm: React.FC<AddProductFormProps> = ({ onNavigate, onSu
   
   // Rich Text Editor State
   const [fullDescription, setFullDescription] = useState('<h1>Product Overview</h1><p>Experience unmatched sound quality with active noise cancellation and premium battery life.</p>');
-  const [editorTab, setEditorTab] = useState<'write' | 'preview'>('write');
+  const [editorTab, setEditorTab] = useState('write');
 
   // 2. Pricing & Financials
-  const [price, setPrice] = useState<string>('299.99');
-  const [discountPrice, setDiscountPrice] = useState<string>('249.99');
-  const [costPrice, setCostPrice] = useState<string>('120.00');
+  const [price, setPrice] = useState('299.99');
+  const [discountPrice, setDiscountPrice] = useState('249.99');
+  const [costPrice, setCostPrice] = useState('120.00');
 
   // 3. Inventory & Logistics
   const [sku, setSku] = useState('APX-HEAD-009');
   const [barcode, setBarcode] = useState('8901234567890');
-  const [stock, setStock] = useState<string>('45');
-  const [weight, setWeight] = useState<string>('0.45');
-  const [dimLength, setDimLength] = useState<string>('20');
-  const [dimWidth, setDimWidth] = useState<string>('18');
-  const [dimHeight, setDimHeight] = useState<string>('8');
+  const [stock, setStock] = useState('45');
+  const [weight, setWeight] = useState('0.45');
+  const [dimLength, setDimLength] = useState('20');
+  const [dimWidth, setDimWidth] = useState('18');
+  const [dimHeight, setDimHeight] = useState('8');
 
   // 4. Tags
-  const [tags, setTags] = useState<string[]>(['Headphones', 'Wireless', 'ANC', 'Bluetooth 5.3']);
+  const [tags, setTags] = useState(['Headphones', 'Wireless', 'ANC', 'Bluetooth 5.3']);
   const [tagInput, setTagInput] = useState('');
 
   // 5. Media & Uploads
-  const [thumbnail, setThumbnail] = useState<string | null>(
+  const [thumbnail, setThumbnail] = useState(
     'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800&auto=format&fit=crop&q=80'
   );
-  const [gallery, setGallery] = useState<string[]>([
+  const [gallery, setGallery] = useState([
     'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800&auto=format&fit=crop&q=80',
     'https://images.unsplash.com/photo-1484704849700-f032a568e944?w=800&auto=format&fit=crop&q=80',
     'https://images.unsplash.com/photo-1546435770-a3e426bf472b?w=800&auto=format&fit=crop&q=80'
@@ -82,7 +76,7 @@ export const AddProductForm: React.FC<AddProductFormProps> = ({ onNavigate, onSu
   const [videoUrl, setVideoUrl] = useState('https://www.youtube.com/watch?v=dQw4w9WgXcQ');
 
   // 6. Marketing Badges & Status
-  const [status, setStatus] = useState<'Published' | 'Draft' | 'Scheduled'>('Published');
+  const [status, setStatus] = useState('Published');
   const [isFeatured, setIsFeatured] = useState(true);
   const [isTrending, setIsTrending] = useState(true);
   const [isNewArrival, setIsNewArrival] = useState(false);
@@ -91,7 +85,7 @@ export const AddProductForm: React.FC<AddProductFormProps> = ({ onNavigate, onSu
   // 7. SEO & Meta
   const [metaTitle, setMetaTitle] = useState('');
   const [metaDescription, setMetaDescription] = useState('');
-  const [seoKeywords, setSeoKeywords] = useState<string[]>(['Noise Cancelling', 'ApexTech Headphones', 'Wireless Audio']);
+  const [seoKeywords, setSeoKeywords] = useState(['Noise Cancelling', 'ApexTech Headphones', 'Wireless Audio']);
   const [keywordInput, setKeywordInput] = useState('');
 
   // Auto Generate Slug
@@ -114,7 +108,7 @@ export const AddProductForm: React.FC<AddProductFormProps> = ({ onNavigate, onSu
   }, [productName]);
 
   // Subcategories mapping
-  const subCategoriesMap: Record<string, string[]> = {
+  const subCategoriesMap = {
     Electronics: ['Audio & Headphones', 'Smartphones & Accessories', 'Wearables & Smartwatches', 'Laptops & Computers', 'Cameras & Video'],
     Fashion: ['Men\'s Apparel', 'Women\'s Apparel', 'Footwear', 'Watches & Jewelry', 'Bags & Accessories'],
     'Home & Living': ['Kitchen Appliances', 'Smart Home Security', 'Furniture', 'Lighting', 'Decor'],
@@ -130,7 +124,7 @@ export const AddProductForm: React.FC<AddProductFormProps> = ({ onNavigate, onSu
   const margin = effectivePrice > 0 ? ((profit / effectivePrice) * 100).toFixed(1) : '0';
 
   // Handler: Add Tag
-  const handleAddTag = (e?: React.KeyboardEvent) => {
+  const handleAddTag = (e) => {
     if (e && e.key !== 'Enter') return;
     if (e) e.preventDefault();
     if (tagInput.trim() && !tags.includes(tagInput.trim())) {
@@ -139,12 +133,12 @@ export const AddProductForm: React.FC<AddProductFormProps> = ({ onNavigate, onSu
     }
   };
 
-  const handleRemoveTag = (tagToRemove: string) => {
+  const handleRemoveTag = (tagToRemove) => {
     setTags(tags.filter(t => t !== tagToRemove));
   };
 
   // Handler: Add SEO Keyword
-  const handleAddKeyword = (e?: React.KeyboardEvent) => {
+  const handleAddKeyword = (e) => {
     if (e && e.key !== 'Enter') return;
     if (e) e.preventDefault();
     if (keywordInput.trim() && !seoKeywords.includes(keywordInput.trim())) {
@@ -153,7 +147,7 @@ export const AddProductForm: React.FC<AddProductFormProps> = ({ onNavigate, onSu
     }
   };
 
-  const handleRemoveKeyword = (kwToRemove: string) => {
+  const handleRemoveKeyword = (kwToRemove) => {
     setSeoKeywords(seoKeywords.filter(k => k !== kwToRemove));
   };
 
@@ -197,7 +191,7 @@ export const AddProductForm: React.FC<AddProductFormProps> = ({ onNavigate, onSu
   };
 
   // Form Submission
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     alert(`Product "${productName || 'New Product'}" published successfully with SKU ${sku}!`);
     if (onSuccess) onSuccess();
@@ -759,7 +753,7 @@ export const AddProductForm: React.FC<AddProductFormProps> = ({ onNavigate, onSu
               <label className="text-xs font-semibold text-slate-300 block mb-1">Product Status</label>
               <select
                 value={status}
-                onChange={(e: any) => setStatus(e.target.value)}
+                onChange={(e) => setStatus(e.target.value)}
                 className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs font-bold text-white focus:ring-2 focus:ring-indigo-500"
               >
                 <option value="Published">Published (Active on Store)</option>

@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { Customer, OrderItem, CustomerAddress, CustomerWishlistItem, CustomerReviewItem } from '../types';
 import { 
   X, 
   User, 
@@ -26,22 +25,15 @@ import {
   TrendingUp
 } from 'lucide-react';
 
-interface CustomerDetailModalProps {
-  customer: Customer | null;
-  orders: OrderItem[];
-  onClose: () => void;
-  onSelectOrder?: (order: OrderItem) => void;
-}
-
-export const CustomerDetailModal: React.FC<CustomerDetailModalProps> = ({
+export const CustomerDetailModal = ({
   customer,
   orders,
   onClose,
   onSelectOrder
 }) => {
-  const [activeTab, setActiveTab] = useState<'overview' | 'orders' | 'wishlist' | 'reviews' | 'addresses'>('overview');
+  const [activeTab, setActiveTab] = useState('overview');
   const [showAddAddress, setShowAddAddress] = useState(false);
-  const [newAddr, setNewAddr] = useState<Partial<CustomerAddress>>({
+  const [newAddr, setNewAddr] = useState({
     label: 'Home',
     isDefault: false,
     recipientName: customer?.name || '',
@@ -53,7 +45,7 @@ export const CustomerDetailModal: React.FC<CustomerDetailModalProps> = ({
     phone: customer?.phone || ''
   });
 
-  const [addressesState, setAddressesState] = useState<CustomerAddress[]>(() => {
+  const [addressesState, setAddressesState] = useState(() => {
     if (!customer) return [];
     if (customer.addresses && customer.addresses.length > 0) return customer.addresses;
     return [
@@ -72,7 +64,7 @@ export const CustomerDetailModal: React.FC<CustomerDetailModalProps> = ({
     ];
   });
 
-  const [wishlistState, setWishlistState] = useState<CustomerWishlistItem[]>(() => {
+  const [wishlistState, setWishlistState] = useState(() => {
     if (!customer) return [];
     if (customer.wishlist && customer.wishlist.length > 0) return customer.wishlist;
     return [
@@ -81,7 +73,7 @@ export const CustomerDetailModal: React.FC<CustomerDetailModalProps> = ({
     ];
   });
 
-  const [reviewsState, setReviewsState] = useState<CustomerReviewItem[]>(() => {
+  const [reviewsState, setReviewsState] = useState(() => {
     if (!customer) return [];
     if (customer.reviews && customer.reviews.length > 0) return customer.reviews;
     return [
@@ -89,7 +81,7 @@ export const CustomerDetailModal: React.FC<CustomerDetailModalProps> = ({
     ];
   });
 
-  const [actionNotice, setActionNotice] = useState<string | null>(null);
+  const [actionNotice, setActionNotice] = useState(null);
 
   if (!customer) return null;
 
@@ -101,13 +93,13 @@ export const CustomerDetailModal: React.FC<CustomerDetailModalProps> = ({
 
   const phone = customer.phone || '+1 (555) 019-2831';
 
-  const handleAddAddressSubmit = (e: React.FormEvent) => {
+  const handleAddAddressSubmit = (e) => {
     e.preventDefault();
     if (!newAddr.street || !newAddr.city) return;
 
-    const created: CustomerAddress = {
+    const created = {
       id: `addr-${Date.now()}`,
-      label: newAddr.label as any || 'Home',
+      label: newAddr.label || 'Home',
       isDefault: addressesState.length === 0 || !!newAddr.isDefault,
       recipientName: newAddr.recipientName || customer.name,
       street: newAddr.street || '',
@@ -129,13 +121,13 @@ export const CustomerDetailModal: React.FC<CustomerDetailModalProps> = ({
     setTimeout(() => setActionNotice(null), 3000);
   };
 
-  const handleRemoveAddress = (id: string) => {
+  const handleRemoveAddress = (id) => {
     setAddressesState(prev => prev.filter(a => a.id !== id));
     setActionNotice('Address removed from profile.');
     setTimeout(() => setActionNotice(null), 3000);
   };
 
-  const handleRemoveWishlist = (id: string) => {
+  const handleRemoveWishlist = (id) => {
     setWishlistState(prev => prev.filter(w => w.id !== id));
     setActionNotice('Item removed from customer wishlist.');
     setTimeout(() => setActionNotice(null), 3000);
@@ -597,7 +589,7 @@ export const CustomerDetailModal: React.FC<CustomerDetailModalProps> = ({
                       <label className="text-slate-400 block mb-1">Address Label</label>
                       <select
                         value={newAddr.label}
-                        onChange={(e) => setNewAddr({ ...newAddr, label: e.target.value as any })}
+                        onChange={(e) => setNewAddr({ ...newAddr, label: e.target.value })}
                         className="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-white"
                       >
                         <option value="Home">Home</option>

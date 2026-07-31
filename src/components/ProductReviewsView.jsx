@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { ProductReview } from '../types';
 import { 
   MessageSquare, 
   CheckCircle2, 
@@ -19,33 +18,25 @@ import {
   AlertCircle
 } from 'lucide-react';
 
-interface ProductReviewsViewProps {
-  reviews: ProductReview[];
-  onApproveReview: (reviewId: string) => void;
-  onRejectReview: (reviewId: string) => void;
-  onReplyReview: (reviewId: string, replyText: string) => void;
-  onDeleteReview: (reviewId: string) => void;
-}
-
-export const ProductReviewsView: React.FC<ProductReviewsViewProps> = ({
+export const ProductReviewsView = ({
   reviews,
   onApproveReview,
   onRejectReview,
   onReplyReview,
   onDeleteReview
 }) => {
-  const [selectedStatus, setSelectedStatus] = useState<'All' | 'Pending' | 'Approved' | 'Rejected'>('All');
-  const [ratingFilter, setRatingFilter] = useState<number | 'All'>('All');
+  const [selectedStatus, setSelectedStatus] = useState('All');
+  const [ratingFilter, setRatingFilter] = useState('All');
   const [searchTerm, setSearchTerm] = useState('');
 
   // Reply Modal State
-  const [replyModalReview, setReplyModalReview] = useState<ProductReview | null>(null);
+  const [replyModalReview, setReplyModalReview] = useState(null);
   const [replyText, setReplyText] = useState('');
 
   // Toast Notice State
-  const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const [toastMessage, setToastMessage] = useState(null);
 
-  const triggerToast = (msg: string) => {
+  const triggerToast = (msg) => {
     setToastMessage(msg);
     setTimeout(() => setToastMessage(null), 3500);
   };
@@ -65,29 +56,29 @@ export const ProductReviewsView: React.FC<ProductReviewsViewProps> = ({
   const approvedCount = reviews.filter(r => r.status === 'Approved').length;
   const rejectedCount = reviews.filter(r => r.status === 'Rejected').length;
 
-  const handleApprove = (review: ProductReview) => {
+  const handleApprove = (review) => {
     onApproveReview(review.id);
     triggerToast(`Approved review by ${review.customerName} for ${review.productName}`);
   };
 
-  const handleReject = (review: ProductReview) => {
+  const handleReject = (review) => {
     onRejectReview(review.id);
     triggerToast(`Rejected review by ${review.customerName}`);
   };
 
-  const handleDelete = (review: ProductReview) => {
+  const handleDelete = (review) => {
     if (confirm(`Are you sure you want to delete this review by ${review.customerName}?`)) {
       onDeleteReview(review.id);
       triggerToast(`Deleted review #${review.id}`);
     }
   };
 
-  const openReplyModal = (review: ProductReview) => {
+  const openReplyModal = (review) => {
     setReplyModalReview(review);
     setReplyText(review.adminReply?.text || '');
   };
 
-  const submitReply = (e: React.FormEvent) => {
+  const submitReply = (e) => {
     e.preventDefault();
     if (!replyModalReview || !replyText.trim()) return;
 
@@ -147,7 +138,7 @@ export const ProductReviewsView: React.FC<ProductReviewsViewProps> = ({
               return (
                 <button
                   key={tab.id}
-                  onClick={() => setSelectedStatus(tab.id as any)}
+                  onClick={() => setSelectedStatus(tab.id)}
                   className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all border flex items-center gap-2 ${
                     isSelected
                       ? 'bg-indigo-600 text-white border-indigo-500 shadow-md shadow-indigo-600/20'

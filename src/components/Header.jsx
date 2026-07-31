@@ -1,5 +1,4 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { TimeRange } from '../types';
 import { 
   Calendar, 
   Download, 
@@ -14,21 +13,7 @@ import {
   Settings
 } from 'lucide-react';
 
-interface HeaderProps {
-  timeRange: TimeRange;
-  setTimeRange: (range: TimeRange) => void;
-  searchQuery: string;
-  setSearchQuery: (query: string) => void;
-  onExport: () => void;
-  isRefreshing: boolean;
-  onRefresh: () => void;
-  onToggleSidebar?: () => void;
-  currentUser?: { name: string; email: string; role: string };
-  onLogout?: () => void;
-  onNavigateProfile?: () => void;
-}
-
-export const Header: React.FC<HeaderProps> = ({
+export const Header = ({
   timeRange,
   setTimeRange,
   searchQuery,
@@ -42,11 +27,11 @@ export const Header: React.FC<HeaderProps> = ({
   onNavigateProfile
 }) => {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
-  const dropdownRef = useRef<HTMLDivElement>(null);
+  const dropdownRef = useRef(null);
 
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
         setIsProfileOpen(false);
       }
     };
@@ -54,7 +39,7 @@ export const Header: React.FC<HeaderProps> = ({
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const getInitials = (name: string) => {
+  const getInitials = (name) => {
     return name
       .split(' ')
       .map(part => part[0])
@@ -151,7 +136,7 @@ export const Header: React.FC<HeaderProps> = ({
             <div className="flex items-center justify-between sm:justify-start bg-slate-900 border border-slate-800 rounded-xl p-1 text-xs overflow-x-auto custom-scrollbar">
               <Calendar className="w-3.5 h-3.5 text-slate-400 ml-1.5 mr-1 hidden sm:block shrink-0" />
               <div className="flex items-center gap-1 w-full sm:w-auto">
-                {(['7d', '30d', '90d', '12m'] as TimeRange[]).map((range) => (
+                {['7d', '30d', '90d', '12m'].map((range) => (
                   <button
                     key={range}
                     onClick={() => setTimeRange(range)}

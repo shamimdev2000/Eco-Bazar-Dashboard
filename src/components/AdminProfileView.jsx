@@ -30,18 +30,7 @@ import {
   LogOut
 } from 'lucide-react';
 
-interface ActivityLogItem {
-  id: string;
-  action: string;
-  category: 'Security' | 'Orders' | 'Products' | 'Settings';
-  timestamp: string;
-  ipAddress: string;
-  device: string;
-  status: 'Success' | 'Warning' | 'Failed';
-  details: string;
-}
-
-const MOCK_ACTIVITY_LOGS: ActivityLogItem[] = [
+const MOCK_ACTIVITY_LOGS = [
   {
     id: 'ACT-901',
     action: '2FA Verification Code Generated',
@@ -94,12 +83,8 @@ const MOCK_ACTIVITY_LOGS: ActivityLogItem[] = [
   }
 ];
 
-interface AdminProfileViewProps {
-  onLogout?: () => void;
-}
-
-export const AdminProfileView: React.FC<AdminProfileViewProps> = ({ onLogout }) => {
-  const [activeTab, setActiveTab] = useState<'profile' | 'password' | '2fa' | 'activity-log'>('profile');
+export const AdminProfileView = ({ onLogout }) => {
+  const [activeTab, setActiveTab] = useState('profile');
 
   // Profile Form State
   const [fullName, setFullName] = useState('Alexander Wright');
@@ -131,18 +116,18 @@ export const AdminProfileView: React.FC<AdminProfileViewProps> = ({ onLogout }) 
   // Activity Log State
   const [activitySearch, setActivitySearch] = useState('');
   const [activityCategoryFilter, setActivityCategoryFilter] = useState('All');
-  const [logs, setLogs] = useState<ActivityLogItem[]>(MOCK_ACTIVITY_LOGS);
+  const [logs, setLogs] = useState(MOCK_ACTIVITY_LOGS);
 
   // Toast notification
-  const [toastMsg, setToastMsg] = useState<string | null>(null);
+  const [toastMsg, setToastMsg] = useState(null);
 
-  const triggerToast = (msg: string) => {
+  const triggerToast = (msg) => {
     setToastMsg(msg);
     setTimeout(() => setToastMsg(null), 3000);
   };
 
   // Password Strength Calculation
-  const getPasswordStrength = (pwd: string) => {
+  const getPasswordStrength = (pwd) => {
     if (!pwd) return { score: 0, label: 'Empty', color: 'bg-slate-800' };
     let score = 0;
     if (pwd.length >= 8) score++;
@@ -158,12 +143,12 @@ export const AdminProfileView: React.FC<AdminProfileViewProps> = ({ onLogout }) 
 
   const pwdStrength = getPasswordStrength(newPassword);
 
-  const handleProfileSubmit = (e: React.FormEvent) => {
+  const handleProfileSubmit = (e) => {
     e.preventDefault();
     triggerToast('Profile details updated successfully!');
   };
 
-  const handlePasswordSubmit = (e: React.FormEvent) => {
+  const handlePasswordSubmit = (e) => {
     e.preventDefault();
     if (newPassword !== confirmPassword) {
       alert('New password and confirmation password do not match.');
@@ -188,7 +173,7 @@ export const AdminProfileView: React.FC<AdminProfileViewProps> = ({ onLogout }) 
     setVerificationCode('');
   };
 
-  const copyToClipboard = (text: string, label: string) => {
+  const copyToClipboard = (text, label) => {
     navigator.clipboard?.writeText(text);
     triggerToast(`Copied ${label} to clipboard!`);
   };
@@ -288,7 +273,7 @@ export const AdminProfileView: React.FC<AdminProfileViewProps> = ({ onLogout }) 
             return (
               <button
                 key={tab.id}
-                onClick={() => setActiveTab(tab.id as any)}
+                onClick={() => setActiveTab(tab.id)}
                 className={`px-4 py-2.5 rounded-xl text-xs font-bold transition-all border flex items-center gap-2 ${
                   active 
                     ? 'bg-indigo-600 text-white border-indigo-500 shadow-md shadow-indigo-600/20' 

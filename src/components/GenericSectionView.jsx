@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { AdminViewId, OrderItem, TopProduct, Coupon, FlashSaleItem, ProductReview, MediaItem, BlogArticle, FAQItem } from '../types';
 import { AddProductForm } from './AddProductForm';
 import { 
   ShoppingBag, 
@@ -38,21 +37,7 @@ import {
   CreditCard
 } from 'lucide-react';
 
-interface GenericSectionViewProps {
-  viewId: AdminViewId;
-  orders: OrderItem[];
-  products: TopProduct[];
-  coupons: Coupon[];
-  flashSale: FlashSaleItem[];
-  reviews: ProductReview[];
-  media: MediaItem[];
-  blogs: BlogArticle[];
-  faqs: FAQItem[];
-  onNavigate: (viewId: AdminViewId) => void;
-  onUpdateOrderStatus?: (orderId: string, newStatus: any) => void;
-}
-
-export const GenericSectionView: React.FC<GenericSectionViewProps> = ({
+export const GenericSectionView = ({
   viewId,
   orders,
   products,
@@ -67,7 +52,7 @@ export const GenericSectionView: React.FC<GenericSectionViewProps> = ({
 }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [activeTab, setActiveTab] = useState('all');
-  const [productList, setProductList] = useState<TopProduct[]>(products);
+  const [productList, setProductList] = useState(products);
 
   // Sync if products prop updates
   React.useEffect(() => {
@@ -75,14 +60,14 @@ export const GenericSectionView: React.FC<GenericSectionViewProps> = ({
   }, [products]);
 
   // Handlers for product actions
-  const handleDeleteProduct = (id: string, name: string) => {
+  const handleDeleteProduct = (id, name) => {
     if (confirm(`Are you sure you want to delete "${name}"?`)) {
       setProductList(prev => prev.filter(p => p.id !== id));
     }
   };
 
-  const handleDuplicateProduct = (p: TopProduct) => {
-    const duplicated: TopProduct = {
+  const handleDuplicateProduct = (p) => {
+    const duplicated = {
       ...p,
       id: `p-${Date.now()}`,
       name: `${p.name} (Copy)`,

@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { OrderItem } from '../types';
 import { 
   X, 
   User, 
@@ -23,19 +22,13 @@ import {
   ExternalLink
 } from 'lucide-react';
 
-interface OrderDetailModalProps {
-  order: OrderItem | null;
-  onClose: () => void;
-  onUpdateStatus: (orderId: string, newStatus: OrderItem['status']) => void;
-}
-
-export const OrderDetailModal: React.FC<OrderDetailModalProps> = ({
+export const OrderDetailModal = ({
   order,
   onClose,
   onUpdateStatus
 }) => {
-  const [activeTab, setActiveTab] = useState<'details' | 'timeline' | 'invoice'>('details');
-  const [downloadNotice, setDownloadNotice] = useState<string | null>(null);
+  const [activeTab, setActiveTab] = useState('details');
+  const [downloadNotice, setDownloadNotice] = useState(null);
 
   if (!order) return null;
 
@@ -56,7 +49,7 @@ export const OrderDetailModal: React.FC<OrderDetailModalProps> = ({
 
   const timelineSteps = order.timeline && order.timeline.length > 0 ? order.timeline : defaultTimeline;
 
-  const getStatusBadge = (status: OrderItem['status']) => {
+  const getStatusBadge = (status) => {
     switch (status) {
       case 'Pending':
         return (
@@ -333,7 +326,7 @@ Thank you for your business!
                   Update Fulfillment Status
                 </h4>
                 <div className="flex flex-wrap gap-2">
-                  {(['Pending', 'Processing', 'Shipped', 'Delivered', 'Cancelled'] as OrderItem['status'][]).map((st) => (
+                  {['Pending', 'Processing', 'Shipped', 'Delivered', 'Cancelled'].map((st) => (
                     <button
                       key={st}
                       onClick={() => onUpdateStatus(order.id, st)}

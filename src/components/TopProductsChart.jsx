@@ -1,17 +1,12 @@
 import React from 'react';
-import { TopProduct } from '../types';
 import { Award, TrendingUp, Package, Star } from 'lucide-react';
 
-interface TopProductsChartProps {
-  products: TopProduct[];
-}
-
-export const TopProductsChart: React.FC<TopProductsChartProps> = ({ products }) => {
+export const TopProductsChart = ({ products }) => {
   // Sort products by revenue descending
   const sorted = [...products].sort((a, b) => b.revenue - a.revenue);
   const maxRevenue = sorted[0]?.revenue || 1;
 
-  const formatCurrency = (val: number) => {
+  const formatCurrency = (val) => {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
       currency: 'USD',

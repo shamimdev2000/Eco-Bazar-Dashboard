@@ -9,14 +9,9 @@ import {
   Legend, 
   ResponsiveContainer 
 } from 'recharts';
-import { MonthlyOrderPoint } from '../types';
 import { ShoppingCart, CheckCircle, Clock, XCircle } from 'lucide-react';
 
-interface MonthlyOrdersChartProps {
-  data: MonthlyOrderPoint[];
-}
-
-export const MonthlyOrdersChart: React.FC<MonthlyOrdersChartProps> = ({ data }) => {
+export const MonthlyOrdersChart = ({ data }) => {
   const totalOrdersYear = data.reduce((acc, curr) => acc + curr.total, 0);
   const totalDeliveredYear = data.reduce((acc, curr) => acc + curr.delivered, 0);
   const totalCancelledYear = data.reduce((acc, curr) => acc + curr.cancelled, 0);
@@ -64,7 +59,7 @@ export const MonthlyOrdersChart: React.FC<MonthlyOrdersChartProps> = ({ data }) 
                 fontSize: '12px',
                 boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.5)'
               }}
-              formatter={(value: number, name: string) => [`${value} orders`, name]}
+              formatter={(value, name) => [`${value} orders`, name]}
               labelStyle={{ color: '#94a3b8', fontWeight: 600 }}
             />
             <Legend wrapperStyle={{ fontSize: '12px', paddingTop: '10px' }} />

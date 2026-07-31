@@ -1,28 +1,4 @@
-import {
-  SalesAnalyticsPoint,
-  RevenueAnalyticsPoint,
-  MonthlyOrderPoint,
-  TopProduct,
-  CategorySale,
-  OrderItem,
-  Customer,
-  CustomerSegmentSummary,
-  InventoryItem,
-  Coupon,
-  FlashSaleItem,
-  ProductReview,
-  MediaItem,
-  MarketingCampaign,
-  BlogArticle,
-  BlogCategory,
-  BlogComment,
-  FAQItem,
-  Banner,
-  StoreSettings,
-  SystemNotificationItem
-} from '../types';
-
-export const INITIAL_CUSTOMERS: Customer[] = [
+export const INITIAL_CUSTOMERS = [
   {
     id: 'CUST-1001',
     name: 'Sarah Jenkins',
@@ -239,7 +215,7 @@ export const INITIAL_CUSTOMERS: Customer[] = [
   }
 ];
 
-export const CUSTOMER_SEGMENT_SUMMARIES: CustomerSegmentSummary[] = [
+export const CUSTOMER_SEGMENT_SUMMARIES = [
   {
     segment: 'High-Value Customers',
     customerCount: 1420,
@@ -286,7 +262,7 @@ export const CUSTOMER_SEGMENT_SUMMARIES: CustomerSegmentSummary[] = [
   }
 ];
 
-export const INITIAL_INVENTORY: InventoryItem[] = [
+export const INITIAL_INVENTORY = [
   {
     id: 'INV-101',
     sku: 'ANC-HEAD-01',
@@ -439,7 +415,7 @@ export const INITIAL_INVENTORY: InventoryItem[] = [
   }
 ];
 
-export const INITIAL_COUPONS: Coupon[] = [
+export const INITIAL_COUPONS = [
   {
     id: 'CPN-101',
     code: 'SUMMER20',
@@ -522,27 +498,27 @@ export const INITIAL_COUPONS: Coupon[] = [
 
 export const MOCK_COUPONS = INITIAL_COUPONS;
 
-export const MOCK_FLASH_SALE: FlashSaleItem[] = [
+export const MOCK_FLASH_SALE = [
   { id: 'FS-1', productName: 'Pro Wireless ANC Headphones', originalPrice: 299.99, salePrice: 199.99, discountPercent: 33, soldUnits: 142, totalUnits: 200, endsIn: '06h 42m 15s', status: 'Active' },
   { id: 'FS-2', productName: 'UltraWide Curved Monitor 34"', originalPrice: 849.50, salePrice: 649.00, discountPercent: 24, soldUnits: 48, totalUnits: 50, endsIn: '02h 10m 00s', status: 'Active' }
 ];
 
-export const MOCK_MEDIA: MediaItem[] = [
+export const MOCK_MEDIA = [
   { id: 'MED-1', title: 'hero_banner_summer.jpg', type: 'image', url: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&auto=format&fit=crop&q=80', size: '2.4 MB', dimensions: '1920x1080', uploadedDate: '2026-07-15' },
   { id: 'MED-2', title: 'product_catalog_2026.pdf', type: 'document', url: 'https://images.unsplash.com/photo-1586105251261-72a756497a11?w=400&auto=format&fit=crop&q=80', size: '14.8 MB', uploadedDate: '2026-07-10' }
 ];
 
-export const MOCK_BLOG: BlogArticle[] = [
+export const MOCK_BLOG = [
   { id: 'BLOG-1', title: '10 Workspace Upgrades to Boost Productivity in 2026', slug: '10-workspace-upgrades-to-boost-productivity-2026', category: 'Tech & Workspace', author: 'Alex Rivera', publishedDate: '2026-07-20', views: 4210, status: 'Published' },
   { id: 'BLOG-2', title: 'How to Choose the Perfect Ergonomic Desk Chair', slug: 'how-to-choose-the-perfect-ergonomic-desk-chair', category: 'Home Office', author: 'Sarah Jenkins', publishedDate: '2026-07-12', views: 2890, status: 'Published' }
 ];
 
-export const MOCK_FAQS: FAQItem[] = [
+export const MOCK_FAQS = [
   { id: 'FAQ-1', question: 'What is your standard shipping timeline?', answer: 'Orders ship within 1-2 business days with standard delivery taking 3-5 days.', category: 'Shipping', helpfulCount: 142 },
   { id: 'FAQ-2', question: 'How do returns and refunds work?', answer: 'We offer a 30-day hassle-free return window for un-damaged items in original packaging.', category: 'Returns', helpfulCount: 98 }
 ];
 
-export const INITIAL_ORDERS: OrderItem[] = [
+export const INITIAL_ORDERS = [
   {
     id: 'ORD-9824',
     customerName: 'Sarah Jenkins',
@@ -734,7 +710,7 @@ export const INITIAL_ORDERS: OrderItem[] = [
   }
 ];
 
-export const TOP_PRODUCTS: TopProduct[] = [
+export const TOP_PRODUCTS = [
   {
     id: 'PROD-01',
     name: 'Pro Wireless ANC Headphones',
@@ -809,7 +785,7 @@ export const TOP_PRODUCTS: TopProduct[] = [
   }
 ];
 
-export const CATEGORY_SALES: CategorySale[] = [
+export const CATEGORY_SALES = [
   { name: 'Electronics', sales: 4820, revenue: 1418290, color: '#6366f1', percentage: 42.5 },
   { name: 'Home & Living', sales: 2410, revenue: 842100, color: '#10b981', percentage: 25.2 },
   { name: 'Apparel', sales: 3100, revenue: 520400, color: '#f59e0b', percentage: 15.6 },
@@ -817,7 +793,7 @@ export const CATEGORY_SALES: CategorySale[] = [
   { name: 'Sports & Fitness', sales: 1250, revenue: 173800, color: '#8b5cf6', percentage: 5.2 }
 ];
 
-export const REVENUE_ANALYTICS: RevenueAnalyticsPoint[] = [
+export const REVENUE_ANALYTICS = [
   { month: 'Jan', revenue: 112000, cost: 68000, profit: 44000, target: 100000 },
   { month: 'Feb', revenue: 128000, cost: 72000, profit: 56000, target: 110000 },
   { month: 'Mar', revenue: 145000, cost: 81000, profit: 64000, target: 120000 },
@@ -832,7 +808,7 @@ export const REVENUE_ANALYTICS: RevenueAnalyticsPoint[] = [
   { month: 'Dec', revenue: 298000, cost: 158000, profit: 140000, target: 250000 }
 ];
 
-export const MONTHLY_ORDERS: MonthlyOrderPoint[] = [
+export const MONTHLY_ORDERS = [
   { month: 'Jan', delivered: 820, processing: 45, pending: 22, cancelled: 30, total: 917 },
   { month: 'Feb', delivered: 910, processing: 50, pending: 31, cancelled: 28, total: 1019 },
   { month: 'Mar', delivered: 1050, processing: 62, pending: 40, cancelled: 35, total: 1187 },
@@ -847,7 +823,7 @@ export const MONTHLY_ORDERS: MonthlyOrderPoint[] = [
   { month: 'Dec', delivered: 2280, processing: 145, pending: 102, cancelled: 78, total: 2605 }
 ];
 
-export const DAILY_SALES_30D: SalesAnalyticsPoint[] = Array.from({ length: 30 }, (_, i) => {
+export const DAILY_SALES_30D = Array.from({ length: 30 }, (_, i) => {
   const day = i + 1;
   const dateStr = `Jul ${day < 10 ? '0' + day : day}`;
   const baseSales = 5200 + Math.sin(i / 2) * 1800 + (i % 7 === 5 || i % 7 === 6 ? 2500 : 0);
@@ -861,7 +837,7 @@ export const DAILY_SALES_30D: SalesAnalyticsPoint[] = Array.from({ length: 30 },
   };
 });
 
-export const INITIAL_BANNERS: Banner[] = [
+export const INITIAL_BANNERS = [
   {
     id: 'BAN-101',
     title: 'Next-Gen Workspace Tech Sale',
@@ -961,7 +937,7 @@ export const INITIAL_BANNERS: Banner[] = [
 
 export const MOCK_BANNERS = INITIAL_BANNERS;
 
-export const INITIAL_REVIEWS: ProductReview[] = [
+export const INITIAL_REVIEWS = [
   {
     id: 'REV-901',
     productId: 'PROD-01',
@@ -1049,14 +1025,14 @@ export const INITIAL_REVIEWS: ProductReview[] = [
 
 export const MOCK_REVIEWS = INITIAL_REVIEWS;
 
-export const INITIAL_BLOG_CATEGORIES: BlogCategory[] = [
+export const INITIAL_BLOG_CATEGORIES = [
   { id: 'CAT-B1', name: 'Tech & Electronics', slug: 'tech-electronics', articleCount: 12, description: 'Deep dives into noise cancellation, mechanical switches, and high-refresh displays.' },
   { id: 'CAT-B2', name: 'Workspace Ergonomics', slug: 'workspace-ergonomics', articleCount: 8, description: 'Guides on lumbar support, desk pads, and posture optimizations for remote work.' },
   { id: 'CAT-B3', name: 'Coffee & Living', slug: 'coffee-living', articleCount: 6, description: 'Barista guides, espresso extraction tips, and luxury home aesthetic curation.' },
   { id: 'CAT-B4', name: 'E-Commerce & Buying Guides', slug: 'buying-guides', articleCount: 15, description: 'Comprehensive comparative reviews and seasonal shopping advice.' }
 ];
 
-export const INITIAL_BLOGS: BlogArticle[] = [
+export const INITIAL_BLOGS = [
   {
     id: 'BLOG-101',
     title: 'The Ultimate Guide to Active Noise Cancellation in 2026',
@@ -1121,7 +1097,7 @@ High-tension elastomeric mesh distributes upper body weight evenly across the se
   }
 ];
 
-export const INITIAL_BLOG_COMMENTS: BlogComment[] = [
+export const INITIAL_BLOG_COMMENTS = [
   {
     id: 'CMT-1',
     articleId: 'BLOG-101',
@@ -1144,7 +1120,7 @@ export const INITIAL_BLOG_COMMENTS: BlogComment[] = [
   }
 ];
 
-export const INITIAL_STORE_SETTINGS: StoreSettings = {
+export const INITIAL_STORE_SETTINGS = {
   storeName: 'Eco-Bazar Dashboard',
   storeLogo: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=200&auto=format&fit=crop&q=80',
   currency: 'USD',
@@ -1192,7 +1168,7 @@ export const INITIAL_STORE_SETTINGS: StoreSettings = {
   facebookPixelId: 'FB-PIXEL-9876543210'
 };
 
-export const INITIAL_NOTIFICATIONS: SystemNotificationItem[] = [
+export const INITIAL_NOTIFICATIONS = [
   {
     id: 'NOTIF-101',
     type: 'low_stock',

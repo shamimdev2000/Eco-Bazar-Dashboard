@@ -15,11 +15,7 @@ import {
   UserCheck
 } from 'lucide-react';
 
-interface LoginViewProps {
-  onLogin: (user: { name: string; email: string; role: string }) => void;
-}
-
-export const LoginView: React.FC<LoginViewProps> = ({ onLogin }) => {
+export const LoginView = ({ onLogin }) => {
   const [email, setEmail] = useState('admin@ecobazar.io');
   const [password, setPassword] = useState('admin123');
   const [showPassword, setShowPassword] = useState(false);
@@ -29,14 +25,14 @@ export const LoginView: React.FC<LoginViewProps> = ({ onLogin }) => {
   const [errorMessage, setErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
 
-  const handleQuickDemoFill = (role: string, demoEmail: string) => {
+  const handleQuickDemoFill = (role, demoEmail) => {
     setEmail(demoEmail);
     setPassword('admin123');
     setSelectedRole(role);
     setErrorMessage('');
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     setErrorMessage('');
 
